@@ -9,100 +9,122 @@
 import time
 import math
 import random
+import thread
 
 
 class Arena():
-
     # Tile Structure
     class __Tile:
-        event        = False
-        wait_time    = 0
-        real_time    = 0
-        dur_time     = 0
-        lat          = 0
-        long         = 0
+        start_time = 0
+        finish_time = 0
+        lat = 0
+        long = 0
+        count = 0
 
     # ===============================================================
     # =                         Constructor
     # ===============================================================
 
-    def __init__(self, lat1, long1):
+    def __init__(self, lat1, long1, time):
 
         # Agent Initialization
-        self.__getsEvent    = False
-        self.__agentX       = 0
-        self.__agentY       = 0
-        self.__agentdir     = 0
-        self.__eventqueue   = []
-        self.count          = 0                 # REMENBER TO DELETE!!!!!!!!!!!!
+        self.__getsEvent = False
+        self.__agentX = 0
+        self.__agentY = 0
+        self.__agentdir = 0
+        self.__eventqueue = []
+        self.count = 0  # REMENBER TO DELETE!!!!!!!!!!!!
         # may update other features and parameters later
 
         self.__colDimension = 10
         self.__rowDimension = 10
+        self.__time = time
         self.__board = [[self.__Tile() for j in range(self.__colDimension)] for i in range(self.__rowDimension)]
         self.__addLongLat(lat1, long1)
-        self.__addEvent()
-        while self.count<10:                                         # CHANGE CONDITION!!!!!!!
-            self.__watiCount()
-            self.__eventCount()
-            self.print_world()
-            self.count += 1
-
-
-        # self.__addFeatures(lat1, long1, lat2, long2)
-        # while True:
-        #    self.__addEvent(self.__randomInt(10), self.__randomInt(10))
-        #    time.sleep(60)
+        self.__addEventTimes()
 
     # ===============================================================
     # =             Arena Generation Functions
     # ===============================================================
-    def __watiCount(self):
-        time.sleep(5)
+    def __addEventTimes(self):
         for r in range(self.__rowDimension):
             for c in range(self.__colDimension):
-                if self.__board[c][r].real_time != 0:
-                    self.__board[c][r].real_time -= 1
-                else:
-                    self.__board[c][r].event = True
-                    self.__addDuration(c,r)
+                self.__board[c][r].start_time = self.__time + self.__addTime()  # *60
+                self.__board[c][r].finish_time = self.__board[c][r].start_time + self.__addTime()  # *60
 
-    def __eventCount(self):
-        print ("eventcount")
+    def __addTime(self):
+        time = 0
+        num = 0
+        while (num != 1):
+            time += 1
+            num = random.randint(1, 5)
+        return time;
 
-    def __addDuration(self,c,r):
-        self.__board[c][r].dur_time = random.randint(1,5)
-
-    def __addEvent(self):
-        for r in range(self.__rowDimension):
-            for c in range(self.__colDimension):
-                self.__board[c][r].wait_time = random.randint(1,10)
-                self.__board[c][r].real_time = self.__board[c][r].wait_time
-
-    def __addLongLat(self, lat, long):
+    def __addLongLat(self, lat, lon):
         dNorth = 0
         dEast = 0
         earth_radius = 6378137.0  # Radius of "spherical" earth
-
+	self.__board[0][0].lat = lat
+	self.__board[0][0].long = lon
         # Coordinate offsets in radians
         for r in range(self.__rowDimension):
-            dNorth += 0.5
             for c in range(self.__colDimension):
-                dEast += 0.5
-                dLat = dNorth / earth_radius
-                dLon = dEast / (earth_radius * math.cos(math.pi * lat / 180))
-                self.__board[c][r].lat = lat + (dLat * 180 / math.pi)
-                self.__board[c][r].long = long + (dLon * 180 / math.pi)
-
+		if (r==0 and c==0):
+		    continue
+		else:
+                    dEast += 10
+                    dLat = dNorth / earth_radius
+                    dLon = dEast / (earth_radius * math.cos(math.pi * lat / 180))
+                    self.__board[c][r].lat = lat + (dLat * 180 / math.pi)
+                    self.__board[c][r].long = lon + (dLon * 180 / math.pi)
+	    dNorth += 10
+	    dEast = 0
 
     # ===============================================================
     # =             Arena Fetch Functions
     # ===============================================================
-    def get_board(self):
-        return self.__board
+    def update_board(self):
+        while True:
+            time.sleep(1)  # *60
+            time_now = time.time()
+            for r in range(self.__rowDimension):
+                for c in range(self.__colDimension):
+                    if (time_now > self.__board[c][r].finish_time):
+                        self.__board[c][r].start_time = self.__board[c][r].finish_time + self.__addTime()
+                        self.__board[c][r].finish_time = self.__board[c][r].start_time + self.__addTime()
 
-    def print_world(self):
-        for r in range(10):
-            for c in range(10):
-                if self.__board[c][r].event == True:
-                    print((self.__board[c][r].lat, self.__board[c][r].long))
+    def get_board(self, time):
+        for r in range(self.__rowDimension):
+            for c in range(self.__colDimension):
+                if (time > self.__board[c][r].start_time):
+                    print((self.__board[c][r].lat, self.__board[c][r].long, "HasEvent"))
+                else:
+                    print("NoEvent")
+
+    def get_event(self, c,r, time):
+        if (time > self.__board[c][r].start_time):
+            return "HasEvent"
+        else:
+            return "NoEvent"
+
+
+                    #   def print_world(self):
+                    #      for r in range(10):
+                    #         for c in range(10):
+                    #            print((self.__board[c][r].lat, self.__board[c][r].long))
+
+                    # board_info = Arena(33.24532,53.12354,time.time())
+                    # board_info.update_board()
+
+    def get_longlat(self):
+        result = []
+        for r in range(self.__rowDimension):
+	    if (r%2==0):
+            	for c in range(self.__colDimension):
+                    result.append((self.__board[c][r].lat,self.__board[c][r].long,c,r))
+	    else:
+	        for c in range(self.__colDimension-1,-1,-1):
+                    result.append((self.__board[c][r].lat,self.__board[c][r].long,c,r))
+        return result
+
+#board_info = Arena(33.24532, 53.12354, time.time())
