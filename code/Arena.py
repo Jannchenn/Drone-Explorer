@@ -10,6 +10,7 @@ import time
 import math
 import random
 import thread
+import numpy as np 
 
 
 class Arena():
@@ -25,16 +26,16 @@ class Arena():
     # =                         Constructor
     # ===============================================================
 
-    def __init__(self, lat1, long1, time):
-
-        # Agent Initialization
+    def __init__(self, lat1, long1, time, distribution1, distribution2):
+		# Agent Initialization
         self.__getsEvent = False
         self.__agentX = 0
         self.__agentY = 0
         self.__agentdir = 0
         self.__eventqueue = []
         self.count = 0  # REMENBER TO DELETE!!!!!!!!!!!!
-        # may update other features and parameters later
+		# may update other features and parameters later
+        self.__distribution = (distribution1,distribution2)
 
         self.__colDimension = 10
         self.__rowDimension = 10
@@ -49,23 +50,28 @@ class Arena():
     def __addEventTimes(self):
         for r in range(self.__rowDimension):
             for c in range(self.__colDimension):
-                self.__board[c][r].start_time = self.__time + self.__addTime()  # *60
-                self.__board[c][r].finish_time = self.__board[c][r].start_time + self.__addTime()  # *60
+                self.__board[c][r].start_time = self.__time + self.__addTime(self.__distribution[0])  # *60
+                self.__board[c][r].finish_time = self.__board[c][r].start_time + self.__addTime(self.__distribution[1])  # *60
 
-    def __addTime(self):
+    def __addTime(self,dist):
         time = 0
         num = 0
-        while (num != 1):
-            time += 1
-            num = random.randint(1, 5)
+        target = 250
+        beta = 1.0/target
+        if dist=="random20":
+            while (num != 1):
+            	time += 1
+            	num = random.randint(1, 5)
+        elif dist=="exponential":
+	    	time = np.random.exponential(beta,5000) 
         return time;
 
     def __addLongLat(self, lat, lon):
         dNorth = 0
         dEast = 0
         earth_radius = 6378137.0  # Radius of "spherical" earth
-	self.__board[0][0].lat = lat
-	self.__board[0][0].long = lon
+        self.__board[0][0].lat = lat
+        self.__board[0][0].long = lon
         # Coordinate offsets in radians
         for r in range(self.__rowDimension):
             for c in range(self.__colDimension):
@@ -90,8 +96,8 @@ class Arena():
             for r in range(self.__rowDimension):
                 for c in range(self.__colDimension):
                     if (time_now > self.__board[c][r].finish_time):
-                        self.__board[c][r].start_time = self.__board[c][r].finish_time + self.__addTime()
-                        self.__board[c][r].finish_time = self.__board[c][r].start_time + self.__addTime()
+                        self.__board[c][r].start_time = self.__board[c][r].finish_time + self.__addTime(self.__distribution[0])
+                        self.__board[c][r].finish_time = self.__board[c][r].start_time + self.__addTime(self.__distribution[1])
 
     def get_board(self, time):
         for r in range(self.__rowDimension):

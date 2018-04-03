@@ -13,7 +13,7 @@ import Drone
 
 board_info = Drone.board_info
 board = board_info.get_longlat()
-drone = Drone.Drone(board)
+drone = Drone.Drone(board,"random")
 
 
 class ThreadingExample(object):
@@ -49,6 +49,7 @@ board_info.get_board(time.time())
 print('Bye')
 
 drone.run()
+drone.stats()
 
 
 
