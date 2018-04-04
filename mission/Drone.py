@@ -63,24 +63,24 @@ class Drone():
             time.sleep(1)
 
     def stats(self):
-	report = open("report.txt","w+")
-	report.write("Times Arrived: \n")
-	for r in range(10):
-	    for c in range(10):
-		report.write(self.times_arrived[(r,c)])
-		report.write("    ")
-	    report.write("\n")
-	report.write("Times has events: \n")
-	for r in range(10):
-	    for c in range(10):
-		report.write(self.times_hasEvent[(r,c)])
-		report.write("    ")
-	    report.write("\n")
-	report.write("Total sectors visited: \n")
-	report.write(self.total_visit)
-	report.write("\nTotal events detected: \n")
-	report.write(self.total_events)
-	report.close()
+        report = open("report.txt","w+")
+        report.write("Times Arrived: \n")
+        for r in range(10):
+            for c in range(10):
+                report.write(self.times_arrived[(r,c)])
+                report.write("    ")
+                report.write("\n")
+        report.write("Times has events: \n")
+        for r in range(10):
+            for c in range(10):
+                report.write(self.times_hasEvent[(r,c)])
+                report.write("    ")
+                report.write("\n")
+        report.write("Total sectors visited: \n")
+        report.write(self.total_visit)
+        report.write("\nTotal events detected: \n")
+        report.write(self.total_events)
+        report.close()
 
 
     def run(self):

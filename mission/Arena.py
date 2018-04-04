@@ -27,14 +27,13 @@ class Arena():
     # ===============================================================
 
     def __init__(self, lat1, long1, time, distribution1, distribution2):
-		# Agent Initialization
+        # Agent Initialization
         self.__getsEvent = False
         self.__agentX = 0
         self.__agentY = 0
         self.__agentdir = 0
         self.__eventqueue = []
-        self.count = 0  # REMENBER TO DELETE!!!!!!!!!!!!
-		# may update other features and parameters later
+        # may update other features and parameters later
         self.__distribution = (distribution1,distribution2)
 
         self.__colDimension = 10
@@ -50,8 +49,9 @@ class Arena():
     def __addEventTimes(self):
         for r in range(self.__rowDimension):
             for c in range(self.__colDimension):
-                self.__board[c][r].start_time = self.__time + self.__addTime(self.__distribution[0])  # *60
-                self.__board[c][r].finish_time = self.__board[c][r].start_time + self.__addTime(self.__distribution[1])  # *60
+                self.__board[c][r].start_time = self.__time + self.__addTime(self.__distribution[0])
+                self.__board[c][r].count += 1
+                self.__board[c][r].finish_time = self.__board[c][r].start_time + self.__addTime(self.__distribution[1]) * 60
 
     def __addTime(self,dist):
         time = 0
@@ -60,11 +60,11 @@ class Arena():
         beta = 1.0/target
         if dist=="random20":
             while (num != 1):
-            	time += 1
-            	num = random.randint(1, 5)
+                time += 1
+                num = random.randint(1, 5)
         elif dist=="exponential":
-	    	time = np.random.exponential(beta,5000) 
-        return time;
+            time = np.random.exponential(beta,5000)
+        return time
 
     def __addLongLat(self, lat, lon):
         dNorth = 0
@@ -75,16 +75,16 @@ class Arena():
         # Coordinate offsets in radians
         for r in range(self.__rowDimension):
             for c in range(self.__colDimension):
-		if (r==0 and c==0):
-		    continue
-		else:
+                if (r==0 and c==0):
+                    continue
+                else:
                     dEast += 10
                     dLat = dNorth / earth_radius
                     dLon = dEast / (earth_radius * math.cos(math.pi * lat / 180))
                     self.__board[c][r].lat = lat + (dLat * 180 / math.pi)
                     self.__board[c][r].long = lon + (dLon * 180 / math.pi)
-	    dNorth += 10
-	    dEast = 0
+            dNorth += 10
+            dEast = 0
 
     # ===============================================================
     # =             Arena Fetch Functions
@@ -96,14 +96,15 @@ class Arena():
             for r in range(self.__rowDimension):
                 for c in range(self.__colDimension):
                     if (time_now > self.__board[c][r].finish_time):
-                        self.__board[c][r].start_time = self.__board[c][r].finish_time + self.__addTime(self.__distribution[0])
-                        self.__board[c][r].finish_time = self.__board[c][r].start_time + self.__addTime(self.__distribution[1])
+                        self.__board[c][r].start_time = self.__board[c][r].finish_time + self.__addTime(self.__distribution[0]) * 60
+                        self.__board[c][r].count += 1
+                        self.__board[c][r].finish_time = self.__board[c][r].start_time + self.__addTime(self.__distribution[1]) * 60
 
     def get_board(self, time):
         for r in range(self.__rowDimension):
             for c in range(self.__colDimension):
                 if (time > self.__board[c][r].start_time):
-                    print((self.__board[c][r].lat, self.__board[c][r].long, "HasEvent"))
+                    print((self.__board[c][r].lat, self.__board[c][r].long, "HasEvent", self.__board[c][r].count))
                 else:
                     print("NoEvent")
 
@@ -125,11 +126,11 @@ class Arena():
     def get_longlat(self):
         result = []
         for r in range(self.__rowDimension):
-	    if (r%2==0):
-            	for c in range(self.__colDimension):
+            if (r%2==0):
+                for c in range(self.__colDimension):
                     result.append((self.__board[c][r].lat,self.__board[c][r].long,c,r))
-	    else:
-	        for c in range(self.__colDimension-1,-1,-1):
+            else:
+                for c in range(self.__colDimension-1,-1,-1):
                     result.append((self.__board[c][r].lat,self.__board[c][r].long,c,r))
         return result
 
