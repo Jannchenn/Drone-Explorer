@@ -95,37 +95,37 @@ class Drone():
         # ------ Go to wpl
         print("Go to wpl")
 
-	for _ in range(3):
-	    if (self.policy=="random"):
-	    	i = randrange(100) # i,j; what's next(policy)
-	    	coor = change_to_coordinate(i)
-	    	lat = self.board[i][0]
-	    	lon = self.board[i][1]
-	    	c = self.board[i][2]
-	    	r = self.board[i][3]
-            	wpl = LocationGlobalRelative(lat, lon, 10)
-	    elif (self.policy == "inorder"):
-	    	coor = change_to_coordinate(_)
-	    	lat = self.board[_][0]
-	    	lon = self.board[_][1]
-	    	c = self.board[_][2]
-	    	r = self.board[_][3]
-
+        for _ in range(3):
+            if (self.policy=="random"):
+                i = randrange(100) # i,j; what's next(policy)
+                coor = change_to_coordinate(i)
+                lat = self.board[i][0]
+                lon = self.board[i][1]
+                c = self.board[i][2]
+                r = self.board[i][3]
+                wpl = LocationGlobalRelative(lat, lon, 10)
+            elif (self.policy == "inorder"):
+                coor = change_to_coordinate(_)
+                lat = self.board[_][0]
+                lon = self.board[_][1]
+                c = self.board[_][2]
+                r = self.board[_][3]
+                wpl = LocationGlobalRelative(lat, lon, 10)
             self.vehicle.simple_goto(wpl)
 
-	    while (get_distance_metres(self.vehicle.location.global_relative_frame,wpl)>1):
-	    	time.sleep(0.5)
-		print("NOT ARRIVED")
-	    print("ARRIVED")
-	    self.total_visit += 1
-	    self.times_arrived[coor] += 1
-	
-	    has_event = board_info.get_event(c,r,time.time())
-	    if has_event=="HasEvent":
-		self.total_events += 1
-		self.times_hasEvent[coor] += 1
-	    print("EVENT: " +  has_event)
-	    time.sleep(5)
+        while (get_distance_metres(self.vehicle.location.global_relative_frame,wpl)>1):
+            time.sleep(0.5)
+            print("NOT ARRIVED")
+        print("ARRIVED")
+        self.total_visit += 1
+        self.times_arrived[coor] += 1
+
+        has_event = board_info.get_event(c,r,time.time())
+        if has_event=="HasEvent":
+            self.total_events += 1
+            self.times_hasEvent[coor] += 1
+        print("EVENT: " +  has_event)
+        time.sleep(5)
 
         # ------ Here you can call your magic
         time.sleep(1)
@@ -138,14 +138,15 @@ class Drone():
 
         # ------ Close connection
         self.vehicle.close()
-	
-	self.stats()
+
+        self.stats()
+
 
 def get_distance_metres(aLocation1, aLocation2):
     """
     Returns the ground distance in metres between two LocationGlobal objects.
 
-    This method is an approximation, and will not be accurate over large distances and close to the 
+    This method is an approximation, and will not be accurate over large distances and close to the
     earth's poles. It comes from the ArduPilot test code: 
     https://github.com/diydrones/ardupilot/blob/master/Tools/autotest/common.py
     """
@@ -159,9 +160,9 @@ def change_to_coordinate(index):
     """
     x = index / 10
     if x%2 == 0:
-	y = index % 10
+        y = index % 10
     else:
-	y = 9 - index % 10
+        y = 9 - index % 10
     return (int(x),int(y))
 
 
