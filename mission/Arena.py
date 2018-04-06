@@ -20,7 +20,7 @@ class Arena():
         finish_time = 0
         lat = 0
         long = 0
-        count = 0
+        id = 0
 
     # ===============================================================
     # =                         Constructor
@@ -36,8 +36,8 @@ class Arena():
         # may update other features and parameters later
         self.__distribution = (distribution1,distribution2)
 
-        self.__colDimension = 10
-        self.__rowDimension = 10
+        self.__colDimension = 3
+        self.__rowDimension = 3
         self.__time = time
         self.__board = [[self.__Tile() for j in range(self.__colDimension)] for i in range(self.__rowDimension)]
         self.__addLongLat(lat1, long1)
@@ -50,8 +50,8 @@ class Arena():
         for r in range(self.__rowDimension):
             for c in range(self.__colDimension):
                 self.__board[c][r].start_time = self.__time + self.__addTime(self.__distribution[0])
-                self.__board[c][r].count += 1
-                self.__board[c][r].finish_time = self.__board[c][r].start_time + self.__addTime(self.__distribution[1]) * 60
+                self.__board[c][r].id += 1
+                self.__board[c][r].finish_time = self.__board[c][r].start_time + self.__addTime(self.__distribution[1]) * 3
 
     def __addTime(self,dist):
         time = 0
@@ -78,12 +78,12 @@ class Arena():
                 if (r==0 and c==0):
                     continue
                 else:
-                    dEast += 10
+                    dEast += 15
                     dLat = dNorth / earth_radius
                     dLon = dEast / (earth_radius * math.cos(math.pi * lat / 180))
                     self.__board[c][r].lat = lat + (dLat * 180 / math.pi)
                     self.__board[c][r].long = lon + (dLon * 180 / math.pi)
-            dNorth += 10
+            dNorth += 15
             dEast = 0
 
     # ===============================================================
@@ -96,23 +96,27 @@ class Arena():
             for r in range(self.__rowDimension):
                 for c in range(self.__colDimension):
                     if (time_now > self.__board[c][r].finish_time):
-                        self.__board[c][r].start_time = self.__board[c][r].finish_time + self.__addTime(self.__distribution[0]) * 60
-                        self.__board[c][r].count += 1
-                        self.__board[c][r].finish_time = self.__board[c][r].start_time + self.__addTime(self.__distribution[1]) * 60
+                        self.__board[c][r].start_time = self.__board[c][r].finish_time + self.__addTime(self.__distribution[0]) * 3
+                        self.__board[c][r].id += 1
+                        self.__board[c][r].finish_time = self.__board[c][r].start_time + self.__addTime(self.__distribution[1]) * 3
 
     def get_board(self, time):
         for r in range(self.__rowDimension):
             for c in range(self.__colDimension):
                 if (time > self.__board[c][r].start_time):
-                    print((self.__board[c][r].lat, self.__board[c][r].long, "HasEvent", self.__board[c][r].count))
+                    print((self.__board[c][r].lat, self.__board[c][r].long, "HasEvent", self.__board[c][r].id))
                 else:
                     print("NoEvent")
 
     def get_event(self, c,r, time):
         if (time > self.__board[c][r].start_time):
-            return "HasEvent"
-        else:
-            return "NoEvent"
+            return True
+        return False
+
+    def get_id(self, c, r, time):
+        if (time > self.__board[c][r].start_time):
+            return self.__board[c][r].id
+        return 0
 
 
                     #   def print_world(self):
