@@ -4,52 +4,36 @@
 # DESCRIPTION: This file contains main function for the board running
 #               in the background
 #
+# CHANGES MADE 04/08: inorder, graph
+#
+# CHANGES TO BE MADE: take out threading example
 # ======================================================================
 
 import time
 #import thread
 import threading
 import Drone
+import Policy
+import Board
+import Stats
+
 
 board_info = Drone.board_info
 board = board_info.get_longlat()
-drone = Drone.Drone(board,"random")
 
-
-class ThreadingExample(object):
-    """ Threading example class
-    The run() method will be started and it will run in the background
-    until the application exits.
-    """
-
-    def __init__(self, interval=1):
-        """ Constructor
-        :type interval: int
-        :param interval: Check interval, in seconds
-        """
-        self.interval = interval
-
-        thread = threading.Thread(target=self.run, args=())
-        thread.daemon = True                            # Daemonize thread
-        thread.start()                                  # Start the execution
-
-    def run(self):
-        """ Method that runs forever """
-        while True:
-            board_info.update_board()
-            print('Doing something imporant in the background')
-
-            time.sleep(self.interval)
-
-example = ThreadingExample()
+update_thread = Board.Threading() # board begins to update
 time.sleep(3)
 print('Checkpoint')
 time.sleep(2)
 board_info.get_board(time.time())
 print('Bye')
 
+policy = Policy.Policy(board,(0,0),(0,9),10,10)
+
+drone = Drone.Drone(board,policy.roomba,"movement",32)
 drone.run()
-drone.stats()
+info = drone.get_stats_info()
+Stats.stats(info)
 
 
 
