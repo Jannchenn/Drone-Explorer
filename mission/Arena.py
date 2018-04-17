@@ -24,7 +24,7 @@ class Arena():
     # =                         Constructor
     # ===============================================================
 
-    def __init__(self, my_lat, my_lon, my_time, start_dis, dur_dis):
+    def __init__(self, my_lat, my_lon, my_time, dur_dis, buf_dis, row, col):
         """Initializes board with 10 x 10 dimensions
         :param my_lat: the initial latitude
         :param my_lon: the initial longtitude
@@ -38,11 +38,11 @@ class Arena():
         self.__agentdir = 0
         self.__eventqueue = []
         # may update other features and parameters later
-        self.__start_dis = start_dis
+        self.__buf_dis = buf_dis
         self.__dur_dis = dur_dis
 
-        self.__colDimension = 10
-        self.__rowDimension = 10
+        self.__colDimension = col
+        self.__rowDimension = row
         self.__time = my_time
         self.__board = [[self.__Tile() for j in range(self.__colDimension)] for i in range(self.__rowDimension)]
         self.__addLongLat(my_lat, my_lon)
@@ -54,7 +54,7 @@ class Arena():
     def __addEventTimes(self):
         for r in range(self.__rowDimension):
             for c in range(self.__colDimension):
-                self.__board[c][r].start_time = self.__time + self.__start_dis()  # don't need __add_time() function
+                self.__board[c][r].start_time = self.__time + self.__buf_dis()  # don't need __add_time() function
                 self.__board[c][r].id += 1
                 self.__board[c][r].finish_time = self.__board[c][r].start_time + self.__dur_dis()
 
@@ -88,7 +88,7 @@ class Arena():
             for r in range(self.__rowDimension):
                 for c in range(self.__colDimension):
                     if (time_now > self.__board[c][r].finish_time):
-                        self.__board[c][r].start_time = self.__board[c][r].finish_time + self.__start_dis()
+                        self.__board[c][r].start_time = self.__board[c][r].finish_time + self.__buf_dis()
                         self.__board[c][r].id += 1
                         self.__board[c][r].finish_time = self.__board[c][r].start_time + self.__dur_dis()
 

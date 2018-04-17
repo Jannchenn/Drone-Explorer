@@ -1,3 +1,10 @@
+# ======================================================================
+# FILE:        Graph.py
+#
+# DESCRIPTION: This file generates corresponding graphs
+#
+# ======================================================================
+
 import matplotlib.pyplot as plt
 import glob
 import re

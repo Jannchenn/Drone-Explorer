@@ -6,11 +6,18 @@
 #
 # ======================================================================
 
+
+from time import gmtime, strftime
+import Board
+
+
 def stats(info):
     """
     collects the data: total different events catched; event information;
     total time visit
     """
+    date = strftime("%d_%b_%H_%M_%S", gmtime())
+    file_name = "report_" + date + ".txt"
     total_events = info[0]
     count_different = info[1]
     missed_events = info[2]
@@ -18,11 +25,11 @@ def stats(info):
     colDim = info[4]
     times_hasEvent = info[5]
     total_visit = info[6]
-    report = open("report.txt","w+")
+    report = open(file_name,"w+")
     report.write("Lambda Buffer: ")
-    report.write()  # str(lambda_buffer))
+    report.write(Board.lambdas[0])  # str(lambda_buffer))
     report.write("Lambda Duration: ")
-    report.write()  # str(lambda_duration))
+    report.write(Board.lambdas[1])  # str(lambda_duration))
     report.write("Total num event caught: ")
     report.write(str(total_events))
     report.write("\n")

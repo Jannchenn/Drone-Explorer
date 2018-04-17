@@ -37,8 +37,6 @@ class Policy():
         This method provides drone to fly inorder
         :return: the tuple of col, row, and wpl
         """
-        print(self.start)
-        print(self.end)
         temp = (0, 0, 0)
         if self.start[0] == self.end[0]:
             temp = self._horizontal()
@@ -68,6 +66,7 @@ class Policy():
         """
         c = self.cur[0]
         r = self.cur[1]
+        print(c,r)
         dir = self._find_dir(self.start[1], self.end[1])
         if c == self.end[0] and r == self.end[1]:
             self.start = (self.end[0], self.end[1])
@@ -125,6 +124,6 @@ class Policy():
             if elem[2] == c and elem[3] == r:
                 lat = elem[0]
                 lon = elem[1]
-                wpl = LocationGlobalRelative(lat, lon, 10)
+                wpl = LocationGlobalRelative(lat, lon, 2)
                 return (c, r, wpl)
 

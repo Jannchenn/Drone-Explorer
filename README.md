@@ -1,14 +1,12 @@
 # Drone Explorer
 
-One Paragraph of project description goes here
+This project makes a drone to explore a certain map
 
 ## Getting Started
 
-These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
-
 ### Prerequisites
 
-What things you need to install the software and how to install them
+You need to have Simulator installed
 
 ```
 Give examples
@@ -34,7 +32,15 @@ End with an example of getting some data out of the system or using it for a lit
 
 ## Running the tests
 
-Explain how to run the automated tests for this system
+### Start simulator without map
+Go to ArduCopter
+sim_vehicle.py
+### Start QC
+cd to Downloads (or wherever your QC locates at)
+./QGroundControl.AppImage
+### Run our script file
+Go to the mission folder
+./DroneExplorer.sh
 
 ### Break down into end to end tests
 
@@ -51,6 +57,27 @@ Explain what these tests test and why
 ```
 Give an example
 ```
+
+## File Descriptions
+### Arena.py
+This file contains Arena class, which contains the map that our agent(UAV) is going to explore
+### Board.py
+This file contains Threading class, and this file will initiate the board to be explored
+### Distribution.py
+Contains distribution: exponential, random
+### Drone.py
+This file controls the drone action
+### Graph.py
+This file generates corresponding graphs
+### Main.py
+This file contains main function for the board running in the background
+### Parameter.py
+get parameters from user
+### Policy.py
+Contains policies drone will fly including: random, roomba
+### Stats.py
+This file conmpute and analyze the result that drone collected
+
 
 ## Deployment
 
