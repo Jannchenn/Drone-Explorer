@@ -1,11 +1,3 @@
-# ======================================================================
-# FILE:        Board.py
-#
-# DESCRIPTION: This file contains Threading class, and this file will
-#               initiate the board to be explored
-#
-# ======================================================================
-
 import Arena
 import time
 #import thread

@@ -1,7 +1,7 @@
 # ======================================================================
 # FILE:        Drone.py
 #
-# DESCRIPTION: This file controls the drone action
+# DESCRIPTION: This file control the drone action
 #
 # ======================================================================
 
@@ -119,7 +119,7 @@ class Drone():
         For each sector we reached, we need to collect information from it, aka fly log
         :param c: the coloum of the board; r: the row of the board; wpl: the loaction of the sector
         """
-        while (get_distance_metres(self.vehicle.location.global_relative_frame, wpl) > 1):
+        while (get_distance_metres(self.vehicle.location.global_relative_frame, wpl) > 2):
             print(get_distance_metres(self.vehicle.location.global_relative_frame, wpl))
             time.sleep(0.5)
             #print("NOT ARRIVED")

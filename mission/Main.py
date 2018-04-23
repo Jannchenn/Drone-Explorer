@@ -36,15 +36,15 @@ if __name__ == "__main__":
     row = int(paras[0].split()[0])
     col = int(paras[0].split()[1])
 
-    for _ in range(10): #remember to edit
-        board = Board.board
-        policy = Policy.Policy(board, (0, 0), (0, row-1), col, row)
-        update_thread = Board.Threading()
-        if paras[-3] == "roomba":
-            drone = Drone.Drone(board, policy.roomba, paras[-2], (int(paras[-1]) if paras[-2] == "movement" else float(paras[-1])), row, col)
-        else:
-            drone = Drone.Drone(board, policy.random, paras[-2], (int(paras[-1]) if paras[-2] == "movement" else float(paras[-1])), row, col)
-        drone.run()
-        info = drone.get_stats_info()
-        Stats.stats(info)
+    #for _ in range(10): #remember to edit
+    board = Board.board
+    policy = Policy.Policy(board, (0, 0), (0, row-1), col, row)
+    update_thread = Board.Threading()
+    if paras[-3] == "roomba":
+        drone = Drone.Drone(board, policy.roomba, paras[-2], (int(paras[-1]) if paras[-2] == "movement" else float(paras[-1])), row, col)
+    else:
+        drone = Drone.Drone(board, policy.random, paras[-2], (int(paras[-1]) if paras[-2] == "movement" else float(paras[-1])), row, col)
+    drone.run()
+    info = drone.get_stats_info()
+    Stats.stats(info)
 

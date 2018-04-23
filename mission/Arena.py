@@ -65,18 +65,36 @@ class Arena():
         self.__board[0][0].lat = lat
         self.__board[0][0].long = lon
         # Coordinate offsets in radians
-        for r in range(self.__rowDimension):
-            for c in range(self.__colDimension):
-                if (r == 0 and c == 0):
-                    continue
-                else:
-                    dEast += 10
-                    dLat = dNorth / earth_radius
-                    dLon = dEast / (earth_radius * math.cos(math.pi * lat / 180))
-                    self.__board[c][r].lat = lat + (dLat * 180 / math.pi)
-                    self.__board[c][r].long = lon + (dLon * 180 / math.pi)
+        # for r in range(self.__rowDimension):
+        #     for c in range(self.__colDimension):
+        #         if (r == 0 and c == 0):
+        #             continue
+        #         else:
+        #             dEast += 10
+        #             dLat = dNorth / earth_radius
+        #             dLon = dEast / (earth_radius * math.cos(math.pi * lat / 180))
+        #             self.__board[c][r].lat = lat + (dLat * 180 / math.pi)
+        #             self.__board[c][r].long = lon + (dLon * 180 / math.pi)
+        #     dNorth += 10
+        #     dEast = 0
+        for c in range(1,self.__colDimension):
+            dEast += 10
+            dLat = dNorth / earth_radius
+            dLon = dEast / (earth_radius * math.cos(math.pi * lat / 180))
+            self.__board[c][0].lat = lat + (dLat * 180 / math.pi)
+            self.__board[c][0].long = lon + (dLon * 180 / math.pi)
+        dEast = 0
+        for r in range(1,self.__rowDimension):
             dNorth += 10
+            for c in range(0,self.__colDimension):
+                dLat = dNorth / earth_radius
+                dLon = dEast / (earth_radius * math.cos(math.pi * lat / 180))
+                self.__board[c][r].lat = lat + (dLat * 180 / math.pi)
+                self.__board[c][r].long = lon + (dLon * 180 / math.pi)
+                dEast += 10
             dEast = 0
+
+
 
     # ===============================================================
     # =             Arena Fetch Functions
