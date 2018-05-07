@@ -7,6 +7,7 @@
 
 from random import randrange
 from dronekit import connect, VehicleMode, LocationGlobalRelative
+from collections import defaultdict
 
 
 class Policy():
@@ -18,13 +19,14 @@ class Policy():
         self.switch = 0
         self.__colDimension = col_dim
         self.__rowDimension = row_dim
+        self.cord_map = change_to_map(board,row_dim * col_dim)
 
     def random(self):
         """
         This method provides drone to fly randomly
         :reutrn: the tuple of col, row, and wpl
         """
-        i = randrange(len(self.board))
+        i = randrange(len(self._check_neighbor))
         lat = self.board[i][0]
         lon = self.board[i][1]
         c = self.board[i][2]
@@ -113,6 +115,42 @@ class Policy():
         else:
             print("nothing")
 
+    def _check_neighbor(self):
+        """
+        This function checks and return all the neighbors
+        :return: list of the valid neighbors(index) that the current position has
+        """
+        result = []
+        c = self.cur[0]
+        r = self.cur[1]
+        cords = set(self.cord_map.keys())
+        up = (c,r+1)
+        down = (c, r-1)
+        left = (c-1, r)
+        right = (c+1, r)
+        upleft = (c-1, r+1)
+        upright = (c+1, r+1)
+        downleft = (c-1, r-1)
+        downright = (c+1, r-1)
+        if up in cords:
+            result.append(self.cord_map[up])
+        if down in cords:
+            result.append(self.cord_map[down])
+        if left in cords:
+            result.append(self.cord_map[left])
+        if right in cords:
+            result.append(self.cord_map[right])
+        if upleft in cords:
+            result.append(self.cord_map[upleft])
+        if upright in cords:
+            result.append(self.cord_map[upright])
+        if downleft in cords:
+            result.append(self.cord_map[downleft])
+        if downright in cords:
+            result.append(self.cord_map[downright])
+        return result
+
+
     def __getboardinfo__(self, c, r):
         """
         For returning the wpl, we need to get information of the longtitude and latitude,
@@ -127,3 +165,30 @@ class Policy():
                 wpl = LocationGlobalRelative(lat, lon, 2)
                 return (c, r, wpl)
 
+
+def change_to_coordinate(index):
+    """
+    Given the index i, returns its corresponding coordinates
+    :param index: the index of the list
+    :return: the related coordinates
+    """
+    x = index / 10
+    if x%2 == 0:
+        y = index % 10
+    else:
+        y = 9 - index % 10
+        return (int(x),int(y))
+
+
+def change_to_map(board,l):
+    """
+    Given the board, return a dictionary
+    :param board: the board to be transferred
+    :return: the dictionary, key: (c,r), val: index
+    """
+    result = defaultdict(int)
+    for i in range(l):
+        c = board[i][2]
+        r = board[i][3]
+        result[(c,r)] = i
+    return result

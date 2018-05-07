@@ -132,6 +132,9 @@ class Arena():
         return self.__board[c][r].id
 
     def get_longlat(self):
+        """
+        :return: one dimension of board, [(0,0),(0,1),(0,2),(2,1),(1,1),(1,0),....]
+        """
         result = []
         for r in range(self.__rowDimension):
             if (r % 2 == 0):

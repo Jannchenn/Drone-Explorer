@@ -211,3 +211,5 @@ def get_distance_metres(aLocation1, aLocation2):
     return math.sqrt((dlat * dlat) + (dlong * dlong)) * 1.113195e5
 
 
+
+
