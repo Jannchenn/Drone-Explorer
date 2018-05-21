@@ -1,16 +1,13 @@
 # Drone Explorer
 
-This project makes a drone to explore a certain map
+UAV machine will explore a map and discover objects. 
 
 ## Getting Started
 
 ### Prerequisites
-
-You need to have Simulator installed
-
-```
-Give examples
-```
+Install SITL
+Preferably use on Linux 
+Install QGroundControl 
 
 ### Installing
 
@@ -41,6 +38,9 @@ cd to Downloads (or wherever your QC locates at)
 ### Run our script file
 Go to the mission folder
 ./DroneExplorer.sh
+
+Graph.py 
+Change directory that has reports of drone's explorations 
 
 ### Break down into end to end tests
 
