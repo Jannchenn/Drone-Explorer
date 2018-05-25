@@ -23,4 +23,3 @@ class Distribution:
 
     def exponential(self):
         return random.expovariate(self.var)
-

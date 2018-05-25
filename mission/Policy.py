@@ -5,7 +5,7 @@
 #
 # ======================================================================
 
-from random import randrange
+from random import randrange, random
 from dronekit import connect, VehicleMode, LocationGlobalRelative
 from collections import defaultdict
 
@@ -26,11 +26,13 @@ class Policy():
         This method provides drone to fly randomly
         :reutrn: the tuple of col, row, and wpl
         """
-        i = randrange(len(self._check_neighbor))
+        l = self._check_neighbor()
+        i = l[randrange(0,len(l))]
         lat = self.board[i][0]
         lon = self.board[i][1]
         c = self.board[i][2]
         r = self.board[i][3]
+        self.cur = (c,r)
         wpl = LocationGlobalRelative(lat, lon, 10)
         return (c, r, wpl)
 

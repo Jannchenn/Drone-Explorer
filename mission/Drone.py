@@ -18,7 +18,7 @@ board_info = Board.board_info  # The board that keeps updating events
 import argparse
 
 
-class Drone():
+class Drone:
     # Tile Structure
     class __Tile:
         last_time_visit = 0
@@ -51,6 +51,7 @@ class Drone():
         self.times_hasEvent = defaultdict(val)
         self.total_visit = 0
         self.total_events = 0
+        self.movements = list()
 
         self.connection_string = self.args.connect
 
@@ -126,6 +127,7 @@ class Drone():
         print("ARRIVED")
         # Collect and update explore map
         self.total_visit += 1
+        self.movements.append((c, r))
         # self.times_arrived[(c, r)] += 1
 
         now_time = time.time()
@@ -139,7 +141,7 @@ class Drone():
         self.explore[c][r].id = event_id
 
         print("EVENT: " + str(has_event))
-        time.sleep(5)
+        time.sleep(0.5)
 
     def fly(self):
         """
@@ -161,13 +163,13 @@ class Drone():
         self.arm_and_takeoff(10)
 
         # ------ set the default speed
-        self.vehicle.airspeed = 8
+        self.vehicle.airspeed = 10
 
         # ------ Go to wpl
         print("Go to wpl")
 
         if self.fix == "time":
-            timeout = time.time() + 60 * self.round  # round minutes from now
+            timeout = time.time() + self.round  # round minutes from now
             while True:
                 if time.time() > timeout:
                     break
@@ -209,7 +211,6 @@ def get_distance_metres(aLocation1, aLocation2):
     print ("target: " + str(aLocation2.lat) + " " + str(aLocation2.lon) + "/n")
     print ("reached: " + str(aLocation1.lat) + " " + str(aLocation1.lon) + "/n")
     return math.sqrt((dlat * dlat) + (dlong * dlong)) * 1.113195e5
-
 
 
 

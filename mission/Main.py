@@ -47,4 +47,3 @@ if __name__ == "__main__":
     drone.run()
     info = drone.get_stats_info()
     Stats.stats(info)
-
