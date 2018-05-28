@@ -16,7 +16,7 @@ class Distribution:
     def random20(self):
         time = 0
         num = 0
-        while (num != 1):
+        while num != 1:
             time += 1
             num = random.randint(1, 5)
         return time

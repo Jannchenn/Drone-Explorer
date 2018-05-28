@@ -47,16 +47,18 @@ class Drone:
         self.__rowDimension = row
 
         # self.times_arrived = defaultdict(int)
-        val = lambda: defaultdict(int)
+        val = lambda: defaultdict(list)
         self.times_hasEvent = defaultdict(val)
         self.total_visit = 0
         self.total_events = 0
         self.movements = list()
+        self.missed = defaultdict(int)
 
         self.connection_string = self.args.connect
 
         print("Connection to the vehicle on %s" % self.connection_string)
         self.vehicle = connect(self.connection_string, wait_ready=True)
+        self.speed = 0
         self.board = board  # The board has long, lat, col and row
         self.explore = [[self.__Tile() for j in range(self.__colDimension)] for i in
                         range(self.__rowDimension)]  # The board includes information that drone catches
@@ -101,19 +103,27 @@ class Drone:
         """
         This method will count the total missed events
         """
-        missed_events = 0
         for row in range(self.__rowDimension):
             for col in range(self.__colDimension):
                 max_id = board_info.get_max_id(col, row)
                 if (col, row) not in self.times_hasEvent.keys():
-                    missed_events += max_id
+                    self.missed[(col, row)] += max_id
                 else:
                     events = self.times_hasEvent[(col, row)].keys()
                     for i in range(max_id):
                         i = i + 1
                         if i + 1 not in events:
-                            missed_events += 1
-        return missed_events
+                            self.missed[(col, row)] += 1
+        return self.missed
+
+    def total_missed_events(self):
+        """
+        This method will count the TOTAL missed events
+        """
+        result = 0
+        for val in self.missed.values():
+            result += val
+        return result
 
     def collect_data(self, c, r, wpl):
         """
@@ -122,7 +132,7 @@ class Drone:
         """
         while (get_distance_metres(self.vehicle.location.global_relative_frame, wpl) > 2):
             print(get_distance_metres(self.vehicle.location.global_relative_frame, wpl))
-            time.sleep(0.5)
+            time.sleep(0.1)
             #print("NOT ARRIVED")
         print("ARRIVED")
         # Collect and update explore map
@@ -136,12 +146,11 @@ class Drone:
         event_id = board_info.get_id(c, r, now_time)
         if has_event:
             self.total_events += 1
-            self.times_hasEvent[(c, r)][event_id] += 1
+            self.times_hasEvent[(c, r)][event_id].append(now_time)
         self.explore[c][r].has_event = has_event
         self.explore[c][r].id = event_id
 
         print("EVENT: " + str(has_event))
-        time.sleep(0.5)
 
     def fly(self):
         """
@@ -164,6 +173,7 @@ class Drone:
 
         # ------ set the default speed
         self.vehicle.airspeed = 10
+        self.speed = 10
 
         # ------ Go to wpl
         print("Go to wpl")
@@ -194,8 +204,9 @@ class Drone:
         """
         returns a tuple that contains all the information needed
         """
-        return (self.total_events, self.count_different(), self.missed_events(), self.__rowDimension, self.__colDimension,
-                self.times_hasEvent, self.total_visit)
+        return (self.total_events, self.count_different(), self.missed_events(), self.total_missed_events(),
+                self.__rowDimension, self.__colDimension,
+                self.times_hasEvent, self.total_visit, self.round, self.speed)
 
 
 def get_distance_metres(aLocation1, aLocation2):

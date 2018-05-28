@@ -70,16 +70,16 @@ class Policy():
         """
         c = self.cur[0]
         r = self.cur[1]
-        print(c,r)
-        dir = self._find_dir(self.start[1], self.end[1])
+        print(c, r)
+        d = self._find_dir(self.start[1], self.end[1])
         if c == self.end[0] and r == self.end[1]:
             self.start = (self.end[0], self.end[1])
             self.end = (self.__colDimension - 1 - self.start[0], self.end[1])
             self.switch = 2
             return
         if (r % 2 == 0 and c == self.__colDimension - 1) or (r % 2 == 1 and c == 0):
-            self.cur = (c, r + dir)
-            return self.__getboardinfo__(c, r + dir)
+            self.cur = (c, r + d)
+            return self.__getboardinfo__(c, r + d)
         if r % 2 == 1:
             self.cur = (c - 1, r)
             return self.__getboardinfo__(c - 1, r)
@@ -99,15 +99,15 @@ class Policy():
         """
         c = self.cur[0]
         r = self.cur[1]
-        dir = self._find_dir(self.start[0], self.end[0])
+        d = self._find_dir(self.start[0], self.end[0])
         if c == self.end[0] and r == self.end[1]:
             self.start = (self.end[0], self.end[1])
             self.end = (self.end[0], self.__rowDimension - 1 - self.start[1])
             self.switch = 1
             return
         if (c % 2 == 1 and r == self.__rowDimension - 1) or (c % 2 == 0 and r == 0):
-            self.cur = (c + dir, r)
-            return self.__getboardinfo__(c + dir, r)
+            self.cur = (c + d, r)
+            return self.__getboardinfo__(c + d, r)
         if c % 2 == 0:
             self.cur = (c, r - 1)
             return self.__getboardinfo__(c, r - 1)
@@ -130,10 +130,6 @@ class Policy():
         down = (c, r-1)
         left = (c-1, r)
         right = (c+1, r)
-        upleft = (c-1, r+1)
-        upright = (c+1, r+1)
-        downleft = (c-1, r-1)
-        downright = (c+1, r-1)
         if up in cords:
             result.append(self.cord_map[up])
         if down in cords:
@@ -142,14 +138,6 @@ class Policy():
             result.append(self.cord_map[left])
         if right in cords:
             result.append(self.cord_map[right])
-        if upleft in cords:
-            result.append(self.cord_map[upleft])
-        if upright in cords:
-            result.append(self.cord_map[upright])
-        if downleft in cords:
-            result.append(self.cord_map[downleft])
-        if downright in cords:
-            result.append(self.cord_map[downright])
         return result
 
 
@@ -165,7 +153,7 @@ class Policy():
                 lat = elem[0]
                 lon = elem[1]
                 wpl = LocationGlobalRelative(lat, lon, 2)
-                return (c, r, wpl)
+                return c, r, wpl
 
 
 def change_to_coordinate(index):
@@ -175,7 +163,7 @@ def change_to_coordinate(index):
     :return: the related coordinates
     """
     x = index / 10
-    if x%2 == 0:
+    if x % 2 == 0:
         y = index % 10
     else:
         y = 9 - index % 10
