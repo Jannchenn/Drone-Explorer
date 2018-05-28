@@ -5,6 +5,7 @@
 #
 # ======================================================================
 
+
 try:
     f1 = open("time.txt", "r")
 except IOError:
@@ -14,7 +15,8 @@ else:
     f1.close()
     s = 0
     for t in ts:
-        s += float(t)
+        if t != "\n" and t != "" and t != " ":
+            s += float(t.strip())
     avg = s/len(ts)
 
     try:
