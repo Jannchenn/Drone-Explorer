@@ -125,11 +125,9 @@ def drone_total_stats(info, delimiter=","):
     report.write(hyper_params_vals)
     coordinates = "ttl_evnts,ttl_diff_evnts,ttl_mssd_evnts,ttl_vistd_sctrs\n"
     report.write(coordinates)
-    for row in range(rowDim):
-        for col in range(colDim):
-            line = (str(total_events) + delimiter + str(count_different) + delimiter
-                    + str(total_missed_events) + delimiter + str(total_visit) + "\n")
-            report.write(line)
+    line = (str(total_events) + delimiter + str(count_different) + delimiter
+            + str(total_missed_events) + delimiter + str(total_visit) + "\n")
+    report.write(line)
     report.close()
 
 

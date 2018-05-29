@@ -23,7 +23,7 @@ else:
     dur_dist = Distribution.Distribution(float(lambdas[1]))
     if dis == "expo":
         board_info = Arena.Arena(-35.36323782441763, 149.16522927736207, time.time(), dur_dist.exponential,
-                                 buf_dist.random20, row, col)
+                                 buf_dist.exponential, row, col)
     else:
         board_info = Arena.Arena(-35.36323782441763, 149.16522927736207, time.time(), dur_dist.exponential,
                                  buf_dist.random20, row, col)
@@ -44,7 +44,7 @@ class Threading(object):
         self.interval = interval
         self.thread = threading.Thread(target=self.run, args=())
         self.stop = False
-        #thread.daemon = True
+        self.thread.daemon = True
         self.thread.start()
 
     def run(self):
