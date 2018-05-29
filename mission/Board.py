@@ -52,6 +52,7 @@ class Threading(object):
         """
         while not self.stop:
             board_info.update_board()
+        print "Stop updating board"
 
     def join(self):
         self.thread.join()
