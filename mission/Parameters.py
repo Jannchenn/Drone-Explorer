@@ -22,12 +22,12 @@ class Parameters:
         This method get all the input from the user
         """
         self.row = raw_input("Board row dimension: ")
-        while not check_int(self.row):
+        while not _check_int(self.row):
             print "Please enter valid number"
             self.row = raw_input("Board row dimension: ")
 
         self.col = raw_input("Board col dimension: ")
-        while not check_int(self.col):
+        while not _check_int(self.col):
             print "Please enter valid number"
             self.col = raw_input("Board col dimension: ")
 
@@ -38,14 +38,14 @@ class Parameters:
 
         buffer = raw_input("List of distribution coefficients for event buffer time for testing: ")
         self.buf = buffer.split()
-        while not check_list_digit(self.buf):
+        while not _check_list_digit(self.buf):
             print "Please enter valid list of coefficients"
             buffer = raw_input("List of distribution coefficients for event buffer time for testing: ")
             self.buf = buffer.split()
 
         duration = raw_input("List of distribution coefficients for event duration time for testing: ")
         self.dur = duration.split()
-        while not check_list_digit(self.dur) or len(self.dur) != len(self.buf):
+        while not _check_list_digit(self.dur) or len(self.dur) != len(self.buf):
             print "Please enter valid list of coefficients and make sure it has the same quantity of coefficients as buffer"
             duration = raw_input("List of distribution coefficients for event duration time for testing: ")
             self.dur = duration.split()
@@ -62,7 +62,7 @@ class Parameters:
 
         self.rd = raw_input("How many rounds would you like to stop the drone? \n (time:seconds/movement:steps(int)): ")
         if self.end == "movement":
-            while not check_int(self.rd):
+            while not _check_int(self.rd):
                 print "Please enter valid integer for movement"
                 self.rd = raw_input("How many rounds would you like to stop the drone? \n (time:seconds/movement:steps(int)): ")
         else:
@@ -72,13 +72,15 @@ class Parameters:
 
     def run(self):
         """
-        This function writes all the parameters to one file, and the order is:
-        row col
-        rule
-        buf/dur pairs
-        policy
-        end
-        round
+        This function writes all the parameters to two files, and the order is:
+        paras.txt:
+            row col
+            rule
+            policy
+            end
+            round
+        lambdas.txt:
+            buf/dur pairs
         """
         self.get_input()
         f = open("paras.txt", "w+")
@@ -100,7 +102,7 @@ class Parameters:
         return result
 
 
-def check_int(i):
+def _check_int(i):
     """
     This function checks the input string is an integer or not
     :param i: the input string to be checked
@@ -113,7 +115,7 @@ def check_int(i):
         return False
 
 
-def check_fload(i):
+def _check_fload(i):
     """
     This function checks the input string is a float number or not
     :param i: the input string to be checked
@@ -126,7 +128,7 @@ def check_fload(i):
     return True
 
 
-def check_list_digit(l):
+def _check_list_digit(l):
     """
     This function ensures the items in the list are all digits
     :param l: the list to be checked

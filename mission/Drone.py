@@ -46,7 +46,8 @@ class Drone:
         self.__colDimension = col
         self.__rowDimension = row
 
-        # self.times_arrived = defaultdict(int)
+        # self.times_arrived = defaultd
+        # ict(int)
         val = lambda: defaultdict(list)
         self.times_hasEvent = defaultdict(val)
         self.total_visit = 0
@@ -96,12 +97,13 @@ class Drone:
         result = 0
         for each in self.times_hasEvent.values():
             result += len(each)
-
+e
         return result
 
     def missed_events(self):
         """
-        This method will count the total missed events
+        Updates self.missed so that track the missed events for each sector.
+        :return: the missed events status for each sector.
         """
         for row in range(self.__rowDimension):
             for col in range(self.__colDimension):
@@ -111,7 +113,6 @@ class Drone:
                 else:
                     events = self.times_hasEvent[(col, row)].keys()
                     for i in range(max_id):
-                        i = i + 1
                         if i + 1 not in events:
                             self.missed[(col, row)] += 1
         return self.missed
@@ -204,7 +205,8 @@ class Drone:
         """
         returns a tuple that contains all the information needed
         """
-        return (self.total_events, self.count_different(), self.missed_events(), self.total_missed_events(),
+        self.missed_events()
+        return (self.total_events, self.count_different(), self.missed, self.total_missed_events(),
                 self.__rowDimension, self.__colDimension,
                 self.times_hasEvent, self.total_visit, self.round, self.speed)
 

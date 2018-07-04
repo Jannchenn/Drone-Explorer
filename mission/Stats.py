@@ -104,7 +104,7 @@ def drone_total_stats(info, delimiter=","):
     :param delimiter: the delimiter of the data. Comma by default
     """
     GLO = time()
-    file_name = "Drone_Total_" + str(GLO) + ".txt"
+    file_name = "Drone_Total_" + str(GLO) + ".csv"
     total_events = info[0]
     count_different = info[1]
     total_missed_events = info[3]

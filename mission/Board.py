@@ -1,6 +1,14 @@
+# ======================================================================
+# FILE:        Board.py
+#
+# DESCRIPTION: This file includes Threading class that will start the 
+#               board to update. Also, it will initialize the board
+#               information
+#
+# ======================================================================
+
 import Arena
 import time
-#import thread
 import threading
 import Distribution
 
