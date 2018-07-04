@@ -211,7 +211,7 @@ class Drone:
         count = self.missed_events()
         return (self.total_events, self.count_different(), self.missed, self.total_missed_events(),
                 self.__rowDimension, self.__colDimension,
-                self.times_hasEvent, self.total_visit, self.round, self.speed)
+                self.times_hasEvent, self.total_visit, self.round, self.speed, count)
 
 
 def get_distance_metres(aLocation1, aLocation2):

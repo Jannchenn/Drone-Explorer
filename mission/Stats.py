@@ -10,6 +10,7 @@
 from time import gmtime, strftime, time
 import Board
 
+
 def board_stats(info, delimiter=","):
     """
     write a report about the original board
@@ -113,6 +114,7 @@ def drone_total_stats(info, delimiter=","):
     total_visit = info[7]
     round = info[8]
     speed = info[9]
+    count = info[10]
     random = 1 if info[10] == "random" else 0
     lam_Buf = Board.lambdas[0]
     lam_Dur = Board.lambdas[1]
@@ -123,10 +125,10 @@ def drone_total_stats(info, delimiter=","):
                          + delimiter + str(cal_second(lam_Buf)) + delimiter + str(cal_second(lam_Dur)) + delimiter
                          + str(lam_Buf) + delimiter + str(lam_Dur) + delimiter + str(random) + "\n")
     report.write(hyper_params_vals)
-    coordinates = "ttl_evnts,ttl_diff_evnts,ttl_mssd_evnts,ttl_vistd_sctrs\n"
+    coordinates = "ttl_evnts,ttl_diff_evnts,ttl_mssd_evnts,ttl_vistd_sctrs,ttl_evnt_generate\n"
     report.write(coordinates)
     line = (str(total_events) + delimiter + str(count_different) + delimiter
-            + str(total_missed_events) + delimiter + str(total_visit) + "\n")
+            + str(total_missed_events) + delimiter + str(total_visit) + delimiter + str(count) + "\n")
     report.write(line)
     report.close()
 
