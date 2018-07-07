@@ -115,7 +115,7 @@ def _check_int(i):
         return False
 
 
-def _check_fload(i):
+def _check_float(i):
     """
     This function checks the input string is a float number or not
     :param i: the input string to be checked
@@ -135,7 +135,7 @@ def _check_list_digit(l):
     :return: true when items are all digits, false when there's one item is not digit
     """
     for item in l:
-        if not check_fload(item):
+        if not _check_float(item):
             return False
     return True
 
