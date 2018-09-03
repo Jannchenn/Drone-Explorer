@@ -44,16 +44,15 @@ if __name__ == "__main__":
         drone = Drone.Drone(board, policy.roomba, paras[-2], (int(paras[-1]) if paras[-2] == "movement" else float(paras[-1])), row, col)
     else:
         drone = Drone.Drone(board, policy.random, paras[-2], (int(paras[-1]) if paras[-2] == "movement" else float(paras[-1])), row, col)
-    t1 = time()
     drone.run()
-    t2 = time()
     drone_info = drone.get_stats_info()
     drone_info = drone_info + (paras[-3], )
     board_info = Board.board_info.get_board_info()
+    t = drone.get_time()
     Stats.board_stats(board_info)
     Stats.drone_stats(drone_info)
     Stats.drone_total_stats(drone_info)
-    Stats.time_info(t1, t2)
+    Stats.time_info(t[0], t[1])
     update_thread.stop = True
     update_thread.join()
 

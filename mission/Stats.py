@@ -26,20 +26,19 @@ def board_stats(info, delimiter=","):
     total_dur_avg = info[4]
 
     report = open(file_name, "w")
-    report.write("dim_column,dim_row,buffer_seconds,duration_seconds,buffer_lambda,duration_lambda\n")
-    report.write(str(col) + delimiter +
-                 str(row) + delimiter +
-                 str(cal_second(float(Board.lambdas[0]))) + delimiter +
-                 str(cal_second(float(Board.lambdas[1]))) + delimiter +
-                 Board.lambdas[0] + delimiter +
-                 Board.lambdas[1] + "\n")
-
-    report.write("column,row,max_id,"
+    report.write("dim_column,dim_row,buffer_seconds,duration_seconds,buffer_lambda,duration_lambda,"
+                 "column,row,max_id,"
                  "average_buffer_time,average_duration_time,"
                  "total_board_avg_buf,total_board_avg_dur\n")
     for r in range(row):
         for c in range(col):
-            report.write(str(c) + delimiter +
+            report.write(str(col) + delimiter +
+                         str(row) + delimiter +
+                         str(cal_second(float(Board.lambdas[0]))) + delimiter +
+                         str(cal_second(float(Board.lambdas[1]))) + delimiter +
+                         Board.lambdas[0] + delimiter +
+                         Board.lambdas[1] + delimiter +
+                         str(c) + delimiter +
                          str(r) + delimiter +
                          str(board[c][r].id) + delimiter +
                          str(board[c][r].buf/board[c][r].id) + delimiter +
@@ -72,14 +71,10 @@ def drone_stats(info, delimiter=","):
     lam_Buf = Board.lambdas[0]
     lam_Dur = Board.lambdas[1]
     report = open(file_name, "w+")
-    hyper_params = "dim_col,dim_row,round,drone_speed,sec_Buf,sec_Dur,lam_Buf,lam_Dur,random\n"
-    report.write(hyper_params)
+    report.write("dim_col,dim_row,round,drone_speed,sec_Buf,sec_Dur,lam_Buf,lam_Dur,random,col,row,time,event_id,mssd_evnts\n")
     hyper_params_vals = (str(colDim) + delimiter + str(rowDim) + delimiter + str(round) + delimiter + str(speed)
                          + delimiter + str(cal_second(lam_Buf)) + delimiter + str(cal_second(lam_Dur)) + delimiter
-                         + str(lam_Buf) + delimiter + str(lam_Dur) + delimiter + str(random) + "\n")
-    report.write(hyper_params_vals)
-    coordinates = "col,row,time,event_id,mssd_evnts\n"
-    report.write(coordinates)
+                         + str(lam_Buf) + delimiter + str(lam_Dur) + delimiter + str(random) + delimiter)
     for row in range(rowDim):
         for col in range(colDim):
             msd = "0"
@@ -90,10 +85,12 @@ def drone_stats(info, delimiter=","):
                     for t in times_hasEvent[(col, row)][id]:
                         line = (str(col) + delimiter + str(row) + delimiter + str(t) + delimiter + str(id) + delimiter
                                 + msd + "\n")
+                        report.write(hyper_params_vals)
                         report.write(line)
             else:
                 coor = (str(col) + delimiter + str(row) + delimiter + "0" + delimiter + "0" + delimiter
                        + msd + delimiter + "\n")
+                report.write(hyper_params_vals)
                 report.write(coor)
     report.close()
 
@@ -119,26 +116,23 @@ def drone_total_stats(info, delimiter=","):
     lam_Buf = Board.lambdas[0]
     lam_Dur = Board.lambdas[1]
     report = open(file_name, "w+")
-    hyper_params = "dim_col,dim_row,round,drone_speed,sec_Buf,sec_Dur,lam_Buf,lam_Dur,random\n"
-    report.write(hyper_params)
+    report.write("dim_col,dim_row,round,drone_speed,sec_Buf,sec_Dur,lam_Buf,lam_Dur,random,"
+                 "ttl_evnts,ttl_diff_evnts,ttl_mssd_evnts,ttl_vistd_sctrs,ttl_evnt_generate\n")
     hyper_params_vals = (str(colDim) + delimiter + str(rowDim) + delimiter + str(round) + delimiter + str(speed)
                          + delimiter + str(cal_second(lam_Buf)) + delimiter + str(cal_second(lam_Dur)) + delimiter
-                         + str(lam_Buf) + delimiter + str(lam_Dur) + delimiter + str(random) + "\n")
-    report.write(hyper_params_vals)
-    coordinates = "ttl_evnts,ttl_diff_evnts,ttl_mssd_evnts,ttl_vistd_sctrs,ttl_evnt_generate\n"
-    report.write(coordinates)
+                         + str(lam_Buf) + delimiter + str(lam_Dur) + delimiter + str(random) + delimiter)
     line = (str(total_events) + delimiter + str(count_different) + delimiter
             + str(total_missed_events) + delimiter + str(total_visit) + delimiter + str(count) + "\n")
+    report.write(hyper_params_vals)
     report.write(line)
     report.close()
 
 
-def time_info(t1, t2, delimiter=","):
+def time_info(t1, t2):
     """
     This function will write the time result for each experiment
     :param t1: the starting time
     :param t2: the finishing time
-    :param delimiter: the delimiter of the data. Comma by default
     """
     file_name = "time.txt"
     report = open(file_name, 'a')

@@ -54,6 +54,9 @@ class Drone:
         self.total_events = 0
         self.movements = list()
         self.missed = defaultdict(int)
+        self.start = 0
+        self.end = 0
+        self.count = 0
 
         self.connection_string = self.args.connect
 
@@ -89,6 +92,85 @@ class Drone:
                 break
 
             time.sleep(1)
+
+    def run(self):
+        """
+        flies vehicle according to fixed time or fixed movement, which is
+        determined in main
+        """
+        # ------ MAIN PROGRAM
+        self.arm_and_takeoff(10)
+
+        # ------ set the default speed
+        self.vehicle.airspeed = 10
+        self.speed = 10
+
+        # ------ Go to wpl
+        print("Go to wpl")
+
+        self.start = time.time()
+        if self.fix == "time":
+            timeout = time.time() + self.round  # round minutes from now
+            while True:
+                if time.time() > timeout:
+                    break
+                self.fly()
+
+        elif self.fix == "movement":
+            for _ in range(self.round):
+                self.fly()
+
+        self.end = time.time()
+        self.count = self.missed_events()
+
+        # ------ Coming back
+        print("Coming back")
+        self.vehicle.mode = VehicleMode("RTL")
+
+        time.sleep(60)
+
+        # ------ Close connection
+        self.vehicle.close()
+
+        # self.stats()
+
+    def fly(self):
+        """
+        fly the drone according to the policy
+        """
+        data = self.policy()
+        c = data[0]
+        r = data[1]
+        wpl = data[2]
+        self.vehicle.simple_goto(wpl)
+        self.collect_data(c, r, wpl)
+
+    def collect_data(self, c, r, wpl):
+        """
+        For each sector we reached, we need to collect information from it, aka fly log
+        :param c: the coloum of the board; r: the row of the board; wpl: the loaction of the sector
+        """
+        while (get_distance_metres(self.vehicle.location.global_relative_frame, wpl) > 2):
+            print(get_distance_metres(self.vehicle.location.global_relative_frame, wpl))
+            time.sleep(0.1)
+            #print("NOT ARRIVED")
+        print("ARRIVED")
+        # Collect and update explore map
+        self.total_visit += 1
+        self.movements.append((c, r))
+        # self.times_arrived[(c, r)] += 1
+
+        now_time = time.time()
+        self.explore[c][r].last_time_visit = now_time
+        has_event = board_info.get_event(c, r)
+        event_id = board_info.get_id(c, r, now_time)
+        if has_event:
+            self.total_events += 1
+            self.times_hasEvent[(c, r)][event_id].append(now_time)
+        self.explore[c][r].has_event = has_event
+        self.explore[c][r].id = event_id
+
+        print("EVENT: " + str(has_event))
 
     def count_different(self):
         """
@@ -128,90 +210,20 @@ class Drone:
             result += val
         return result
 
-
-    def collect_data(self, c, r, wpl):
-        """
-        For each sector we reached, we need to collect information from it, aka fly log
-        :param c: the coloum of the board; r: the row of the board; wpl: the loaction of the sector
-        """
-        while (get_distance_metres(self.vehicle.location.global_relative_frame, wpl) > 2):
-            print(get_distance_metres(self.vehicle.location.global_relative_frame, wpl))
-            time.sleep(0.1)
-            #print("NOT ARRIVED")
-        print("ARRIVED")
-        # Collect and update explore map
-        self.total_visit += 1
-        self.movements.append((c, r))
-        # self.times_arrived[(c, r)] += 1
-
-        now_time = time.time()
-        self.explore[c][r].last_time_visit = now_time
-        has_event = board_info.get_event(c, r, now_time)
-        event_id = board_info.get_id(c, r, now_time)
-        if has_event:
-            self.total_events += 1
-            self.times_hasEvent[(c, r)][event_id].append(now_time)
-        self.explore[c][r].has_event = has_event
-        self.explore[c][r].id = event_id
-
-        print("EVENT: " + str(has_event))
-
-    def fly(self):
-        """
-        fly the drone according to the policy
-        """
-        data = self.policy()
-        c = data[0]
-        r = data[1]
-        wpl = data[2]
-        self.vehicle.simple_goto(wpl)
-        self.collect_data(c, r, wpl)
-
-    def run(self):
-        """
-        flies vehicle according to fixed time or fixed movement, which is
-        determined in main
-        """
-        # ------ MAIN PROGRAM
-        self.arm_and_takeoff(10)
-
-        # ------ set the default speed
-        self.vehicle.airspeed = 10
-        self.speed = 10
-
-        # ------ Go to wpl
-        print("Go to wpl")
-
-        if self.fix == "time":
-            timeout = time.time() + self.round  # round minutes from now
-            while True:
-                if time.time() > timeout:
-                    break
-                self.fly()
-
-        elif self.fix == "movement":
-            for _ in range(self.round):
-                self.fly()
-
-        # ------ Coming back
-        print("Coming back")
-        self.vehicle.mode = VehicleMode("RTL")
-
-        time.sleep(60)
-
-        # ------ Close connection
-        self.vehicle.close()
-
-        # self.stats()
-
     def get_stats_info(self):
         """
         returns a tuple that contains all the information needed
         """
-        count = self.missed_events()
         return (self.total_events, self.count_different(), self.missed, self.total_missed_events(),
                 self.__rowDimension, self.__colDimension,
-                self.times_hasEvent, self.total_visit, self.round, self.speed, count)
+                self.times_hasEvent, self.total_visit, self.round, self.speed, self.count)
+
+    def get_time(self):
+        """
+        This function will get the flying time
+        :return: a tuple of start and end time
+        """
+        return self.start, self.end
 
 
 def get_distance_metres(aLocation1, aLocation2):
