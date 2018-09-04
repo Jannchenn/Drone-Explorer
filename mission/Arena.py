@@ -220,13 +220,20 @@ class Arena():
         """
         return len(self.events[(c, r)]) != 0
 
+    def get_current_event_status(self, c, r):
+        """
+        Get the current event status for a certain sector
+        :return: Event list for a certain sector at certain time
+        """
+        return self.events[(c, r)]
+
     def get_id(self, c, r):
         """
         The method gets the current event id
         :param c: the column of the board
         :param r: the row of the board
         :param t: the current time
-        :return: the event id of current event; 0 if no event this time, result = ['EventFix':[], 'EventMove':[]]
+        :return: the event id of current event; result = ['EventFix':[], 'EventMove':[]]
         """
         result = defaultdict(list)
         events = self.events[(c, r)]
@@ -257,9 +264,16 @@ class Arena():
                 max_move = e.id
         return result
 
+    def get_max_both_id(self):
+        """
+        The method return the max ids for both EventMove and EventFix
+        :return: [EventFix_max, EventMove_max]
+        """
+        return [EventFix.event_id-1, EventMove.event_id-1]
+
     def get_longlat(self):
         """
-        :return: one dimension of board, [(0,0),(0,1),(0,2),(2,1),(1,1),(1,0),....]
+        :return: one dimension of board, [(lat,long,0,0),(lat,lon,0,1),(lat,lon,0,2),(lat,lon,2,1),....]
         """
         result = []
         for r in range(self.__rowDimension):
@@ -271,32 +285,38 @@ class Arena():
                     result.append((self.__board[c][r].lat, self.__board[c][r].long, c, r))
         return result
 
-        # board_info = Arena(33.24532, 53.12354, time.time())
-
     def get_average_buf(self):
         """
         This method will calculate the average buffer time
         :return: the average buffer time
         """
-        return self.__total_buf / self.__total_events
+        if self.__total_events != 0:
+            return self.__total_buf / self.__total_events
+        return 0
 
     def get_average_dur_fix(self):
         """
         This method will calculate the average fix event duration time
         :return: the average duration time
         """
-        return self.__total_dur_fix / self.__total_events
+        total_fix_num = self.get_max_both_id()[0]
+        if total_fix_num != 0:
+            return self.__total_dur_fix / total_fix_num
+        return 0
 
     def get_average_dur_move(self):
         """
         This method will calculate the average move event duration time
         :return: the average duration time
         """
-        return self.__total_dur_move / self.__total_events
+        total_move_num = self.get_max_both_id()[1]
+        if total_move_num != 0:
+            return self.__total_dur_move / total_move_num
+        return 0
 
     def get_board_info(self):
         """
         This function will return a tuple of information about the board
         :return: a tuple of information about the board
         """
-        return self.__colDimension, self.__rowDimension, self.__board, self.get_average_buf(), self.get_average_dur_fix(), self.get_average_dur_move()
+        return self.__colDimension, self.__rowDimension, self.get_average_buf(), self.get_average_dur_fix(), self.get_average_dur_move()

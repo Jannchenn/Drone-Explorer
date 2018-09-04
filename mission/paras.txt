@@ -1,6 +1,6 @@
 10 10
-fix 0
+both 0.5
 expo
 roomba
 movement
-2
+10
