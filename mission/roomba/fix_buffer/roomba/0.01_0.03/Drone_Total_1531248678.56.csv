@@ -1,0 +1,2 @@
+dim_col,dim_row,round,drone_speed,sec_Buf,sec_Dur,lam_Buf,lam_Dur,random,ttl_evnts,ttl_diff_evnts,ttl_mssd_evnts,ttl_vistd_sctrs,ttl_evnt_generate
+10,10,200,10,100.0,33.3333333333,0.01,0.03,0,47,47,744,200,791

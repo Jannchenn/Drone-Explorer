@@ -12,7 +12,7 @@ class Parameters:
         self.col = ""
         self.rule = ""
         self.buf = []
-        self.dur_fix = []
+        self.dur = []
         self.policy = ""
         self.end = ""
         self.rd = ""
