@@ -5,12 +5,12 @@
 
 
 # roomba experiment
-filename="lambdas1.txt"
+filename="indep_var.txt"
 while read -r line
 do
     para="$line"
-    lambdas=(${para})
-    echo ${lambdas[0]} ${lambdas[1]} >| boardinput.txt
+    indep_var=(${para})
+    echo ${indep_var[0]} ${indep_var[1]} >| boardinput.txt     # indep_var includes the current prob & dur_expo
     counter=1
     while [ ${counter} -le 2 ]
     do

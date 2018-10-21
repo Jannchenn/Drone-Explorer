@@ -22,9 +22,9 @@ def get_paras():
     :return: a list of parameters
     """
     try:
-        f = open("paras.txt","r")
+        f = open("fix_paras.txt", "r")
     except IOError:
-        print "Cannot open paras.txt"
+        print "Cannot open fix_paras.txt"
     else:
         paras = f.read().split('\n')
         f.close()

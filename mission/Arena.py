@@ -28,17 +28,15 @@ class Arena:
     # =                         Constructor
     # ===============================================================
 
-    def __init__(self, my_lat, my_lon, my_time, row, col, arrival_rate, arrival_num, prob, expo):#, prob, expo):#dur_dis, buf_dis, row, col):
+    def __init__(self, my_lat, my_lon, row, col, arrival_rate, arrival_num, prob, expo, die_expo):#, prob, expo):#dur_dis, buf_dis, row, col):
         """Initializes board with 10 x 10 dimensions
         :param my_lat: the initial latitude
         :param my_lon: the initial longitude
-        :param my_time: current time
         :param arrival_rate: The expo distribution of the interval times a new event will come into the sector
         :param arrival_num: The number of events that will arrive into the board after some time
         :param prob: The probability that the event will stay in the same quadrant
         :param expo: The expo distribution of the event about the time it will stay in one sector
-        #:param buf_dis: buffer time beween events
-        #:param dur_dis: duration time of events
+        :param die_expo: The expo distribution of the event about its lifetime
         """
         self.__getsEvent = False
         self.__agentX = 0
@@ -51,7 +49,8 @@ class Arena:
         self.arrival_rate = arrival_rate
         self.arrival_num = arrival_num
         self.prob = prob
-        self.expo = expo
+        self.stay_expo = expo
+        self.die_expo = die_expo
         self.next_add_event_time = 0
         # may update other features and parameters later
         #self.__buf_dis = buf_dis
@@ -59,7 +58,6 @@ class Arena:
 
         self.__colDimension = col
         self.__rowDimension = row
-        self.__time = my_time
         self.__board = [[self.__Tile() for j in range(self.__colDimension)] for i in range(self.__rowDimension)]
         self.__addLongLat(my_lat, my_lon)
         self.__addEventTimes()
@@ -105,11 +103,11 @@ class Arena:
         for _ in range(self.arrival_num):
             c = random.randint(self.__colDimension)
             r = random.randint(self.__rowDimension)
-            new_event = Event(self.prob, self.expo, self.__colDimension, self.__rowDimension)
+            new_event = Event(self.prob, self.die_expo, self.__colDimension, self.__rowDimension)
             new_event.update_sector(c, r)
             new_event.update_die_time(time.time())
             new_event.update_next_sector()
-            new_event.update_next_move_time(time.time() + self.expo)
+            new_event.update_next_move_time(time.time() + self.stay_expo())
             self.__board[c][r].event_list.append(new_event)
             self.__total_events += 1
             self.next_add_event_time = time.time() + self.arrival_rate()
@@ -146,7 +144,7 @@ class Arena:
                             cur_r = event.next_r
                             event.update_sector(cur_c, cur_r)
                             event.update_next_sector()
-                            event.update_next_move_time(self.expo)
+                            event.update_next_move_time(self.stay_expo())
                             self.__board[c][r].event_list.remove(event)
                             length -= 1
                             self.__board[cur_c][cur_r].event_list.append(event)

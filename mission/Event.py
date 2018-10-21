@@ -26,7 +26,7 @@ class Event:
         self.col_dim = col
         self.row_dim = row
         self.probability = prob
-        self.life_time_expo = lifetime()
+        self.life_time_expo = lifetime
         self.die_time = 0
         self.finish_time = 0
         self.id = Event.event_id
@@ -49,17 +49,14 @@ class Event:
         self.travel_history[(c, r)] += 1
 
     def update_next_sector(self):
-        numbers = [i for i in range(100)]
-        stay = numbers[:self.probability*100]
-        i = random.randint(0, 99)
-        cur_quadrant = quadrant(self.cur_c, self.cur_r, self.row_dim, self.col_dim)
+        numbers = [i for i in range(1000)]
+        stay = numbers[:self.probability*1000]
+        i = random.randint(0, 999)
         if i in stay:
-            self.next_c, self.next_r = random_from_quadrant(self.col_dim, self.row_dim, cur_quadrant)
+            self.next_c, self.next_r = self.cur_c, self.cur_r
         else:
-            quads = [1, 2, 3, 4].remove(cur_quadrant)
-            remove_not_neighbor(quads, cur_quadrant)
-            goto_quad = quads[random.randint(0, 1)]
-            self.next_c, self.next_r = random_from_quadrant(self.col_dim, self.row_dim, goto_quad)
+            goto_next = next_sector(self.cur_c, self.cur_r, self.col_dim, self.row_dim)
+            self.next_c, self.next_r = goto_next[0], goto_next[1]
 
     def update_die_time(self, cur_time):
         """
@@ -67,7 +64,7 @@ class Event:
         :param cur_time: the current time
         :return:
         """
-        self.die_time = cur_time + self.life_time_expo
+        self.die_time = cur_time + self.life_time_expo()
 
     def update_next_move_time(self, dur_time):
         """
@@ -78,7 +75,7 @@ class Event:
         self.finish_time += dur_time
 
 
-def quadrant(c, r, col_dim, row_dim):
+def next_sector(c, r, col_dim, row_dim):
     """
     This function will tell you which quadrant the sector is
     :param c: current column
@@ -87,54 +84,38 @@ def quadrant(c, r, col_dim, row_dim):
     :param row_dim: Row num in the board
     :return: The quadrant
     """
-    mid_row = int((row_dim-1)/2)
-    mid_col = int((col_dim-1)/2)
+    left = (c - 1, r)
+    right = (c + 1, r)
+    up = (c, r + 1)
+    down = (c, r - 1)
 
-    if mid_row < r < row_dim and mid_col < c < col_dim:
-        return 1
-    elif 0 <= r <= mid_row and mid_col < c < col_dim:
-        return 2
-    elif 0 <= c <= mid_col and 0 <= r <= mid_row:
-        return 3
+    if c == 0 and r == 0:
+        available = [up, right]
+        return available[random.randint(2)]
+    elif c == 0 and r == row_dim:
+        available = [down, right]
+        return available[random.randint(2)]
+    elif c == col_dim and r == 0:
+        available = [left, up]
+        return available[random.randint(2)]
+    elif c == col_dim and r == row_dim:
+        available = [left, down]
+        return available[random.randint(2)]
+    elif c == 0:
+        available = [up, down, right]
+        return available[random.randint(3)]
+    elif c == col_dim:
+        available = [left, up, down]
+        return available[random.randint(3)]
+    elif r == 0:
+        available = [left, right, up]
+        return available[random.randint(3)]
+    elif r == row_dim:
+        available = [left, right, down]
+        return available[random.randint(3)]
     else:
-        return 4
-
-
-def random_from_quadrant(col_dim, row_dim, q):
-    """
-    This function finds a random sector in the given quadrant
-    :param col_dim: column number on the board
-    :param row_dim: row number on the board
-    :param q: quadrant number
-    :return: the (x, y) coordinate of the next step in the given quadrant
-    """
-    mid_row = int((row_dim-1)/2)
-    mid_col = int((col_dim-1)/2)
-    if q == 1:
-        return random.randint(mid_row+1, row_dim-1), random.randint(mid_col+1, col_dim-1)
-    if q == 2:
-        return random.randint(0, mid_row), random.randint(mid_col+1, col_dim-1)
-    if q == 3:
-        return random.randint(0, mid_row), random.randint(0, mid_col)
-    if q == 4:
-        return random.randint(mid_row+1, row_dim-1), random.randint(0, mid_col)
-
-
-def remove_not_neighbor(quads, cur_quadrant):
-    """
-    This function will delete the quadrant that are not the neighbor of the current quadrant
-    :param quads: The quadrant list
-    :param cur_quadrant: current quadrant
-    :return:
-    """
-    if cur_quadrant == 1:
-        quads.remove(3)
-    elif cur_quadrant == 2:
-        quads.remove(4)
-    elif cur_quadrant == 3:
-        quads.remove(1)
-    else:
-        quads.remove(2)
+        available = [left, right, up, down]
+        return available[random.randint(4)]
 
 
 
