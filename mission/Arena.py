@@ -31,10 +31,14 @@ class Arena:
     def __init__(self, my_lat, my_lon, my_time, row, col, arrival_rate, arrival_num, prob, expo):#, prob, expo):#dur_dis, buf_dis, row, col):
         """Initializes board with 10 x 10 dimensions
         :param my_lat: the initial latitude
-        :param my_lon: the initial longtitude
+        :param my_lon: the initial longitude
         :param my_time: current time
-        :param buf_dis: buffer time beween events
-        :param dur_dis: duration time of events
+        :param arrival_rate: The expo distribution of the interval times a new event will come into the sector
+        :param arrival_num: The number of events that will arrive into the board after some time
+        :param prob: The probability that the event will stay in the same quadrant
+        :param expo: The expo distribution of the event about the time it will stay in one sector
+        #:param buf_dis: buffer time beween events
+        #:param dur_dis: duration time of events
         """
         self.__getsEvent = False
         self.__agentX = 0
@@ -48,6 +52,7 @@ class Arena:
         self.arrival_num = arrival_num
         self.prob = prob
         self.expo = expo
+        self.next_add_event_time = 0
         # may update other features and parameters later
         #self.__buf_dis = buf_dis
         #self.__dur_dis = dur_dis
@@ -94,11 +99,9 @@ class Arena:
 
     def __setUpEvent(self):
         """
-        initializes event's id and event dictionary
-        for now, one sector may have multiple events initially
+        initializes events
         :return: None
         """
-        time.sleep(self.arrival_rate())
         for _ in range(self.arrival_num):
             c = random.randint(self.__colDimension)
             r = random.randint(self.__rowDimension)
@@ -106,8 +109,10 @@ class Arena:
             new_event.update_sector(c, r)
             new_event.update_die_time(time.time())
             new_event.update_next_sector()
+            new_event.update_next_move_time(time.time() + self.expo)
             self.__board[c][r].event_list.append(new_event)
             self.__total_events += 1
+            self.next_add_event_time = time.time() + self.arrival_rate()
 
     def __addEventTimes(self):
         """
@@ -115,24 +120,12 @@ class Arena:
         :return: None
         """
         self.__setUpEvent()
-        # for r in range(self.__rowDimension):
-        #     for c in range(self.__colDimension):
-        #         buf_time = self.__buf_dis()
-        #         self.__board[c][r].start_time = self.__time + buf_time
-        #         self.__board[c][r].id += 1
-        #         self.__total_events += 1
-        #         self.__total_buf += buf_time
-        #         self.__board[c][r].buf += buf_time
-        #         dur_time = self.__dur_dis()
-        #         self.__board[c][r].finish_time = self.__board[c][r].start_time + dur_time
-        #         self.__total_dur += dur_time
-        #         self.__board[c][r].dur += dur_time
 
     # ===============================================================
     # =             Arena Fetch Functions
     # ===============================================================
 
-    def update_board(self):
+    def update_board(self):   # !!!think and discuss about efficiency next time!!!
         """
         This method keeps updating the board with new events
         :return: None
@@ -140,16 +133,28 @@ class Arena:
         time_now = time.time()
         for r in range(self.__rowDimension):
             for c in range(self.__colDimension):
-                if time_now > self.__board[c][r].finish_time:
-                    buf_time = self.__buf_dis()
-                    self.__board[c][r].start_time = self.__board[c][r].finish_time +buf_time
-                    self.__board[c][r].id += 1
-                    self.__total_buf += buf_time
-                    self.__board[c][r].buf += buf_time
-                    dur_time = self.__dur_dis()
-                    self.__board[c][r].finish_time = self.__board[c][r].start_time + dur_time
-                    self.__total_dur += dur_time
-                    self.__board[c][r].dur += dur_time
+                length = len(self.__board[c][r].event_list)
+                count = 0
+                while count < length:
+                    event = self.__board[c][r].event_list[count]
+                    if time_now >= event.die_time:  # event are going to die
+                        self.__board[c][r].event_list.remove(event)
+                        length -= 1
+                    else:
+                        if time_now > event.finish_time:  # event need to move
+                            cur_c = event.next_c
+                            cur_r = event.next_r
+                            event.update_sector(cur_c, cur_r)
+                            event.update_next_sector()
+                            event.update_next_move_time(self.expo)
+                            self.__board[c][r].event_list.remove(event)
+                            length -= 1
+                            self.__board[cur_c][cur_r].event_list.append(event)
+                        else:
+                            count += 1
+
+        if time_now >= self.next_add_event_time:
+            self.__setUpEvent()
 
     def get_board(self, t):
         """
