@@ -17,8 +17,8 @@
       <file leaf-file-name="Arena.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Arena.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2022">
-              <caret line="146" column="55" lean-forward="false" selection-start-line="146" selection-start-column="34" selection-end-line="146" selection-end-column="55" />
+            <state relative-caret-position="185">
+              <caret line="176" column="44" lean-forward="false" selection-start-line="176" selection-start-column="44" selection-end-line="176" selection-end-column="44" />
               <folding>
                 <element signature="e#300#311#0" expanded="true" />
               </folding>
@@ -29,32 +29,10 @@
       <file leaf-file-name="Event.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Event.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="165">
-              <caret line="68" column="8" lean-forward="false" selection-start-line="68" selection-start-column="8" selection-end-line="68" selection-end-column="29" />
+            <state relative-caret-position="-736">
+              <caret line="16" column="37" lean-forward="true" selection-start-line="16" selection-start-column="27" selection-end-line="16" selection-end-column="37" />
               <folding>
                 <element signature="e#281#300#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Distribution.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Distribution.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="315">
-              <caret line="22" column="0" lean-forward="false" selection-start-line="22" selection-start-column="0" selection-end-line="22" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Drone.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/Drone.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="232">
-              <caret line="34" column="74" lean-forward="false" selection-start-line="34" selection-start-column="74" selection-end-line="34" selection-end-column="74" />
-              <folding>
-                <element signature="e#225#290#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -63,20 +41,18 @@
       <file leaf-file-name="Board.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Board.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="328">
-              <caret line="61" column="37" lean-forward="false" selection-start-line="61" selection-start-column="22" selection-end-line="61" selection-end-column="37" />
-              <folding>
-                <element signature="e#342#354#0" expanded="true" />
-              </folding>
+            <state relative-caret-position="272">
+              <caret line="37" column="36" lean-forward="true" selection-start-line="37" selection-start-column="36" selection-end-line="37" selection-end-column="36" />
+              <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Main.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="Main.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/Main.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="306">
-              <caret line="40" column="26" lean-forward="false" selection-start-line="40" selection-start-column="26" selection-end-line="40" selection-end-column="26" />
+            <state relative-caret-position="253">
+              <caret line="47" column="4" lean-forward="true" selection-start-line="47" selection-start-column="4" selection-end-line="56" selection-end-column="24" />
               <folding />
             </state>
           </provider>
@@ -86,7 +62,7 @@
         <entry file="file://$PROJECT_DIR$/fix_paras.txt">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="15">
-              <caret line="1" column="14" lean-forward="false" selection-start-line="1" selection-start-column="14" selection-end-line="1" selection-end-column="14" />
+              <caret line="1" column="0" lean-forward="false" selection-start-line="1" selection-start-column="0" selection-end-line="1" selection-end-column="14" />
               <folding />
             </state>
           </provider>
@@ -96,7 +72,7 @@
         <entry file="file://$PROJECT_DIR$/indep_var.txt">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="0">
-              <caret line="0" column="8" lean-forward="false" selection-start-line="0" selection-start-column="8" selection-end-line="0" selection-end-column="8" />
+              <caret line="0" column="4" lean-forward="false" selection-start-line="0" selection-start-column="4" selection-end-line="0" selection-end-column="8" />
               <folding />
             </state>
           </provider>
@@ -105,8 +81,28 @@
       <file leaf-file-name="DroneExplore.sh" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/DroneExplore.sh">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="255">
-              <caret line="17" column="21" lean-forward="true" selection-start-line="17" selection-start-column="21" selection-end-line="17" selection-end-column="21" />
+            <state relative-caret-position="330">
+              <caret line="22" column="24" lean-forward="true" selection-start-line="22" selection-start-column="24" selection-end-line="22" selection-end-column="24" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Policy.py" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/Policy.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="292">
+              <caret line="40" column="40" lean-forward="false" selection-start-line="40" selection-start-column="40" selection-end-line="40" selection-end-column="40" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Drone.py" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Drone.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="355">
+              <caret line="222" column="92" lean-forward="true" selection-start-line="222" selection-start-column="92" selection-end-line="222" selection-end-column="92" />
               <folding />
             </state>
           </provider>
@@ -123,7 +119,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>exp</find>
       <find>get_event</find>
       <find>__total_buf</find>
       <find>movement</find>
@@ -149,9 +144,10 @@
       <find>arrival_num</find>
       <find>expo</find>
       <find>next_add_event_time</find>
-      <find>my_time</find>
       <find>update_next_sector</find>
       <find>finish_time</find>
+      <find>count_different</find>
+      <find>my_time</find>
       <find>update_next_move_time</find>
     </findStrings>
   </component>
@@ -166,23 +162,23 @@
         <option value="$PROJECT_DIR$/test 5.20.48 PM.sh" />
         <option value="$PROJECT_DIR$/paras2.txt" />
         <option value="$PROJECT_DIR$/paras1.txt" />
-        <option value="$PROJECT_DIR$/Board.py" />
         <option value="$PROJECT_DIR$/test.sh" />
         <option value="$PROJECT_DIR$/Edit.py" />
         <option value="$PROJECT_DIR$/time.txt" />
         <option value="$PROJECT_DIR$/test.py" />
         <option value="$PROJECT_DIR$/Avgtime.py" />
         <option value="$PROJECT_DIR$/Stats.py" />
-        <option value="$PROJECT_DIR$/Drone.py" />
         <option value="$PROJECT_DIR$/lambdas1.txt" />
         <option value="$PROJECT_DIR$/paras.txt" />
         <option value="$PROJECT_DIR$/roomba/Event.py" />
         <option value="$PROJECT_DIR$/Event.py" />
-        <option value="$PROJECT_DIR$/Arena.py" />
         <option value="$PROJECT_DIR$/DroneExplore.sh" />
         <option value="$PROJECT_DIR$/Main.py" />
         <option value="$PROJECT_DIR$/indep_var.txt" />
         <option value="$PROJECT_DIR$/fix_paras.txt" />
+        <option value="$PROJECT_DIR$/Board.py" />
+        <option value="$PROJECT_DIR$/Arena.py" />
+        <option value="$PROJECT_DIR$/Drone.py" />
       </list>
     </option>
   </component>
@@ -346,12 +342,7 @@
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <element signature="e#268#307#0" expanded="false" />
             <marker date="1531187010400" expanded="true" signature="5186:5336" ph="..." />
-            <marker date="1531187010400" expanded="true" signature="5361:5632" ph="..." />
-            <marker date="1531187010400" expanded="true" signature="5366:5509" ph="&quot;&quot;&quot;...&quot;&quot;&quot;" />
-            <marker date="1531187010400" expanded="true" signature="5655:5823" ph="..." />
-            <marker date="1531187010400" expanded="true" signature="5660:5799" ph="&quot;&quot;&quot;...&quot;&quot;&quot;" />
           </folding>
         </state>
       </provider>
@@ -361,7 +352,7 @@
         <state relative-caret-position="2895">
           <caret line="198" column="30" lean-forward="false" selection-start-line="198" selection-start-column="30" selection-end-line="198" selection-end-column="30" />
           <folding>
-            <element signature="e#225#290#0" expanded="true" />
+            <element signature="e#225#290#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -414,7 +405,7 @@
         <state relative-caret-position="135">
           <caret line="12" column="19" lean-forward="false" selection-start-line="12" selection-start-column="19" selection-end-line="12" selection-end-column="19" />
           <folding>
-            <element signature="e#342#354#0" expanded="true" />
+            <element signature="e#342#354#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -432,12 +423,7 @@
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
-            <element signature="e#268#307#0" expanded="false" />
             <marker date="1531187010400" expanded="true" signature="5186:5336" ph="..." />
-            <marker date="1531187010400" expanded="true" signature="5361:5632" ph="..." />
-            <marker date="1531187010400" expanded="true" signature="5366:5509" ph="&quot;&quot;&quot;...&quot;&quot;&quot;" />
-            <marker date="1531187010400" expanded="true" signature="5655:5823" ph="..." />
-            <marker date="1531187010400" expanded="true" signature="5660:5799" ph="&quot;&quot;&quot;...&quot;&quot;&quot;" />
           </folding>
         </state>
       </provider>
@@ -447,7 +433,7 @@
         <state relative-caret-position="2895">
           <caret line="198" column="30" lean-forward="false" selection-start-line="198" selection-start-column="30" selection-end-line="198" selection-end-column="30" />
           <folding>
-            <element signature="e#225#290#0" expanded="true" />
+            <element signature="e#225#290#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -500,7 +486,7 @@
         <state relative-caret-position="135">
           <caret line="12" column="19" lean-forward="false" selection-start-line="12" selection-start-column="19" selection-end-line="12" selection-end-column="19" />
           <folding>
-            <element signature="e#342#354#0" expanded="true" />
+            <element signature="e#342#354#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -525,7 +511,7 @@
         <state relative-caret-position="105">
           <caret line="12" column="35" lean-forward="false" selection-start-line="12" selection-start-column="35" selection-end-line="12" selection-end-column="35" />
           <folding>
-            <element signature="e#225#290#0" expanded="true" />
+            <element signature="e#225#290#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -563,7 +549,7 @@
         <state relative-caret-position="135">
           <caret line="12" column="19" lean-forward="false" selection-start-line="12" selection-start-column="19" selection-end-line="12" selection-end-column="19" />
           <folding>
-            <element signature="e#342#354#0" expanded="true" />
+            <element signature="e#342#354#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -581,12 +567,7 @@
         <state relative-caret-position="1830">
           <caret line="123" column="102" lean-forward="true" selection-start-line="123" selection-start-column="102" selection-end-line="123" selection-end-column="102" />
           <folding>
-            <element signature="e#268#307#0" expanded="false" />
             <marker date="1531187010400" expanded="true" signature="5186:5336" ph="..." />
-            <marker date="1531187010400" expanded="true" signature="5361:5632" ph="..." />
-            <marker date="1531187010400" expanded="true" signature="5366:5509" ph="&quot;&quot;&quot;...&quot;&quot;&quot;" />
-            <marker date="1531187010400" expanded="true" signature="5655:5823" ph="..." />
-            <marker date="1531187010400" expanded="true" signature="5660:5799" ph="&quot;&quot;&quot;...&quot;&quot;&quot;" />
           </folding>
         </state>
       </provider>
@@ -609,29 +590,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="105">
           <caret line="7" column="0" lean-forward="false" selection-start-line="7" selection-start-column="0" selection-end-line="7" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Stats.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="110" column="0" lean-forward="false" selection-start-line="110" selection-start-column="0" selection-end-line="110" selection-end-column="0" />
-          <folding>
-            <element signature="e#268#307#0" expanded="false" />
-            <marker date="1531187010400" expanded="true" signature="5186:5336" ph="..." />
-            <marker date="1531187010400" expanded="true" signature="5361:5632" ph="..." />
-            <marker date="1531187010400" expanded="true" signature="5366:5509" ph="&quot;&quot;&quot;...&quot;&quot;&quot;" />
-            <marker date="1531187010400" expanded="true" signature="5655:5823" ph="..." />
-            <marker date="1531187010400" expanded="true" signature="5660:5799" ph="&quot;&quot;&quot;...&quot;&quot;&quot;" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Policy.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -666,41 +624,11 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Drone.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="232">
-          <caret line="34" column="74" lean-forward="false" selection-start-line="34" selection-start-column="74" selection-end-line="34" selection-end-column="74" />
-          <folding>
-            <element signature="e#225#290#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Board.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="328">
-          <caret line="61" column="37" lean-forward="false" selection-start-line="61" selection-start-column="22" selection-end-line="61" selection-end-column="37" />
-          <folding>
-            <element signature="e#342#354#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/lambdas1.txt">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="30">
           <caret line="2" column="0" lean-forward="false" selection-start-line="2" selection-start-column="0" selection-end-line="2" selection-end-column="0" />
           <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Event.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="165">
-          <caret line="68" column="8" lean-forward="false" selection-start-line="68" selection-start-column="8" selection-end-line="68" selection-end-column="29" />
-          <folding>
-            <element signature="e#281#300#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -714,26 +642,16 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/DroneExplore.sh">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="255">
-          <caret line="17" column="21" lean-forward="true" selection-start-line="17" selection-start-column="21" selection-end-line="17" selection-end-column="21" />
+        <state relative-caret-position="330">
+          <caret line="22" column="24" lean-forward="true" selection-start-line="22" selection-start-column="24" selection-end-line="22" selection-end-column="24" />
           <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/Arena.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2022">
-          <caret line="146" column="55" lean-forward="false" selection-start-line="146" selection-start-column="34" selection-end-line="146" selection-end-column="55" />
-          <folding>
-            <element signature="e#300#311#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/indep_var.txt">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
-          <caret line="0" column="8" lean-forward="false" selection-start-line="0" selection-start-column="8" selection-end-line="0" selection-end-column="8" />
+          <caret line="0" column="4" lean-forward="false" selection-start-line="0" selection-start-column="4" selection-end-line="0" selection-end-column="8" />
           <folding />
         </state>
       </provider>
@@ -741,15 +659,69 @@
     <entry file="file://$PROJECT_DIR$/fix_paras.txt">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="15">
-          <caret line="1" column="14" lean-forward="false" selection-start-line="1" selection-start-column="14" selection-end-line="1" selection-end-column="14" />
+          <caret line="1" column="0" lean-forward="false" selection-start-line="1" selection-start-column="0" selection-end-line="1" selection-end-column="14" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Main.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="306">
-          <caret line="40" column="26" lean-forward="false" selection-start-line="40" selection-start-column="26" selection-end-line="40" selection-end-column="26" />
+        <state relative-caret-position="253">
+          <caret line="47" column="4" lean-forward="true" selection-start-line="47" selection-start-column="4" selection-end-line="56" selection-end-column="24" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Arena.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="185">
+          <caret line="176" column="44" lean-forward="false" selection-start-line="176" selection-start-column="44" selection-end-line="176" selection-end-column="44" />
+          <folding>
+            <element signature="e#300#311#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Event.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-736">
+          <caret line="16" column="37" lean-forward="true" selection-start-line="16" selection-start-column="27" selection-end-line="16" selection-end-column="37" />
+          <folding>
+            <element signature="e#281#300#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Drone.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="355">
+          <caret line="222" column="92" lean-forward="true" selection-start-line="222" selection-start-column="92" selection-end-line="222" selection-end-column="92" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Stats.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1328">
+          <caret line="110" column="0" lean-forward="false" selection-start-line="110" selection-start-column="0" selection-end-line="110" selection-end-column="0" />
+          <folding>
+            <marker date="1531187010400" expanded="true" signature="5186:5336" ph="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Board.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="272">
+          <caret line="37" column="36" lean-forward="true" selection-start-line="37" selection-start-column="36" selection-end-line="37" selection-end-column="36" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Policy.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="292">
+          <caret line="40" column="40" lean-forward="false" selection-start-line="40" selection-start-column="40" selection-end-line="40" selection-end-column="40" />
           <folding />
         </state>
       </provider>

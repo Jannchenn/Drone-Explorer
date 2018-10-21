@@ -27,14 +27,14 @@ class Drone:
 
     def __init__(self, board, policy, fix, r, row, col):
         """
-         Initializes drone flight characteristcs
-        :param parser:
-        :param my_time: current time
-        :param time_arrived:
+        Initializes drone flight characteristcs
+        :param board: The board for the drone to explore
         :param policy: function of direction drone will fly
         :param fix: a string that determines if the drone's flight is limited to movement or time
-        :param round: integer of number of times drone will look for an event if drone flies accorrding to a fixed movment
+        :param r: integer of number of times drone will look for an event if drone flies according to a fixed movment
                       integer of number of minutes if drone flies according to fixed time
+        :param row: the row number of the drone
+        :param col: the col number of the drone
         """
         self.parser = argparse.ArgumentParser(description='commands')
         self.parser.add_argument('--connect')
@@ -131,7 +131,6 @@ class Drone:
             result += val
         return result
 
-
     def collect_data(self, c, r, wpl):
         """
         For each sector we reached, we need to collect information from it, aka fly log
@@ -149,11 +148,17 @@ class Drone:
 
         now_time = time.time()
         self.explore[c][r].last_time_visit = now_time
-        has_event = board_info.get_event(c, r, now_time)
-        event_id = board_info.get_id(c, r, now_time)
-        if has_event:
-            self.total_events += 1
-            self.times_hasEvent[(c, r)][event_id].append(now_time)
+        # has_event = board_info.get_event(c, r)
+        # event_id = board_info.get_id(c, r)
+        events = board_info.get_event(c, r)
+        has_event = False
+        event_id = []
+        if events:
+            has_event = True
+            self.total_events += len(events)
+            for event in events:
+                event_id.append(event.id)
+                self.times_hasEvent[(c, r)][event].append(now_time)
         self.explore[c][r].has_event = has_event
         self.explore[c][r].id = event_id
 

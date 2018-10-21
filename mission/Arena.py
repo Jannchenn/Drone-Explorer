@@ -167,29 +167,26 @@ class Arena:
                 else:
                     print("NoEvent")
 
-    def get_event(self, c, r, t):
+    def get_event(self, c, r):
         """
-        This method will return if the sector has event or not
+        This method will return if the list of events
         :param c: the column of the board
         :param r: the row of the board
-        :param t: the current time
-        :return: True if this sector at this time has event; false otherwise
+        :return: True if there's event on the current sector, False otherwise
         """
-        if t > self.__board[c][r].start_time:
-            return True
-        return False
+        return self.__board[c][r].event_list
 
-    def get_id(self, c, r, t):
+    def get_id(self, c, r):
         """
         The method gets the current event id
         :param c: the column of the board
         :param r: the row of the board
-        :param t: the current time
-        :return: the event id of current event; 0 if no event this time
+        :return: the a list of event id from the current sector
         """
-        if t > self.__board[c][r].start_time:
-            return self.__board[c][r].id
-        return 0
+        result = []
+        for event in self.__board[c][r].event_list:
+            result.append(event.id)
+        return result
 
     def get_max_id(self, c, r):
         """
