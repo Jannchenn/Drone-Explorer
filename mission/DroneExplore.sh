@@ -18,7 +18,7 @@ do
         ((counter++))
     done
     # Move generated reports in to new folder
-    folder="${lambdas[0]}_${lambdas[1]}"
+    folder="${indep_var[0]}_${indep_var[1]}"  # first is probability, and second is dur_expo
     mkdir ${folder}
     mv Drone_* ${folder}
     mv Board_* ${folder}
