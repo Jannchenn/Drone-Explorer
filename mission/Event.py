@@ -74,6 +74,9 @@ class Event:
         """
         self.finish_time += dur_time
 
+    def get_id(self):
+        return self.id
+
 
 def next_sector(c, r, col_dim, row_dim):
     """

@@ -10,6 +10,7 @@ import time
 import math
 from random import randrange
 import Board
+import Event
 from collections import defaultdict
 
 board_info = Board.board_info  # The board that keeps updating events
@@ -97,11 +98,7 @@ class Drone:
         """
         :return: the number of different events
         """
-        result = 0
-        for each in self.times_hasEvent.values():
-            result += len(each)
-
-        return result
+        return len(self.times_hasEvent)
 
     def missed_events(self):
         """
@@ -158,7 +155,7 @@ class Drone:
             self.total_events += len(events)
             for event in events:
                 event_id.append(event.id)
-                self.times_hasEvent[(c, r)][event].append(now_time)
+                self.times_hasEvent[event][(c, r)].append(now_time)
         self.explore[c][r].has_event = has_event
         self.explore[c][r].id = event_id
 
@@ -220,7 +217,7 @@ class Drone:
         """
         returns a tuple that contains all the information needed
         """
-        return (self.total_events, self.count_different(), self.missed, self.total_missed_events(),
+        return (self.total_events, self.count_different(),
                 self.__rowDimension, self.__colDimension,
                 self.times_hasEvent, self.total_visit, self.round, self.speed, self.count)
 
