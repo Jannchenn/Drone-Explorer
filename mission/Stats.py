@@ -59,38 +59,25 @@ def drone_stats(info, delimiter=","):
     file_name = "Drone_RealTime_" + str(GLO) + ".csv"
     total_events = info[0]
     count_different = info[1]
-    missed_events = info[2]
-    total_missed_events = info[3]
-    rowDim = info[4]
-    colDim = info[5]
-    times_hasEvent = info[6]
-    total_visit = info[7]
-    round = info[8]
-    speed = info[9]
-    random = 1 if info[10] == "random" else 0
+    rowDim = info[2]
+    colDim = info[3]
+    times_hasEvent = info[4]
+    total_visit = info[5]
+    round = info[6]
+    speed = info[7]
+    random = 1 if info[8] == "random" else 0
     lam_Buf = Board.lambdas[0]
     lam_Dur = Board.lambdas[1]
     report = open(file_name, "w+")
-    report.write("dim_col,dim_row,round,drone_speed,sec_Buf,sec_Dur,lam_Buf,lam_Dur,random,col,row,time,event_id,mssd_evnts\n")
+    report.write("col,row,time,event_id,dim_col,dim_row,round,drone_speed,probability,sec_Dur,lam_Dur,random\n")
     hyper_params_vals = (str(colDim) + delimiter + str(rowDim) + delimiter + str(round) + delimiter + str(speed)
-                         + delimiter + str(cal_second(lam_Buf)) + delimiter + str(cal_second(lam_Dur)) + delimiter
-                         + str(lam_Buf) + delimiter + str(lam_Dur) + delimiter + str(random) + delimiter)
-    for row in range(rowDim):
-        for col in range(colDim):
-            msd = "0"
-            report.write(hyper_params_vals)
-            if (col, row) in missed_events:
-                msd = str(missed_events[(col, row)])
-            if (col, row) in times_hasEvent.keys():
-                for id in times_hasEvent[(col, row)].keys():
-                    for t in times_hasEvent[(col, row)][id]:
-                        line = (str(col) + delimiter + str(row) + delimiter + str(t) + delimiter + str(id) + delimiter
-                                + msd + "\n")
-                        report.write(line)
-            else:
-                coor = (str(col) + delimiter + str(row) + delimiter + "0" + delimiter + "0" + delimiter
-                       + msd + delimiter + "\n")
-                report.write(coor)
+                         + delimiter + str(probability) + delimiter + str(cal_second(lam_Dur)) + delimiter
+                         + str(lam_Dur) + delimiter + str(random) + "\n")
+    for event in times_hasEvent:
+        for sector in times_hasEvent[event]:
+            for time in times_hasEvent[event][sector]:
+                line = (str(event.get_id()) + delimiter + str(sector[0]) + delimiter + str(sector[1]) + delimiter + str(time) + hyper_params_vals)
+                report.write(line)
     report.close()
 
 
