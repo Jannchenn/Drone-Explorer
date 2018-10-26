@@ -9,7 +9,6 @@
 
 from time import gmtime, strftime, time
 import Board
-from Event import EventMove, EventFix
 
 
 def board_stats(info, delimiter=","):
@@ -22,30 +21,30 @@ def board_stats(info, delimiter=","):
     file_name = "Board_" + str(GLO) + ".csv"
     col = info[0]
     row = info[1]
-    total_buf_avg = info[2]
-    total_dur_avg_fix = info[3]
-    total_dur_avg_move = info[4]
+    board = info[2]
+    total_buf_avg = info[3]
+    total_dur_avg = info[4]
 
     report = open(file_name, "w")
-    report.write("dim_column,dim_row,buffer_seconds,duration_fix_seconds,duration_move_seconds"
-                 ",buffer_lambda,duration_fix_lambda,duration_move_lambda,"
-                 "column,row,"
-                 "total_board_avg_buf,total_board_avg_dur_fix,total_board_avg_dur_move\n")
+    report.write("dim_column,dim_row,buffer_seconds,duration_seconds,buffer_lambda,duration_lambda,"
+                 "column,row,max_id,"
+                 "average_buffer_time,average_duration_time,"
+                 "total_board_avg_buf,total_board_avg_dur\n")
     for r in range(row):
         for c in range(col):
             report.write(str(col) + delimiter +
                          str(row) + delimiter +
                          str(cal_second(float(Board.lambdas[0]))) + delimiter +
                          str(cal_second(float(Board.lambdas[1]))) + delimiter +
-                         str(cal_second(float(Board.lambdas[2]))) + delimiter +
                          Board.lambdas[0] + delimiter +
                          Board.lambdas[1] + delimiter +
-                         Board.lambdas[2] + delimiter +
                          str(c) + delimiter +
                          str(r) + delimiter +
+                         str(board[c][r].id) + delimiter +
+                         str(board[c][r].buf/board[c][r].id) + delimiter +
+                         str(board[c][r].dur/board[c][r].id) + delimiter +
                          str(total_buf_avg) + delimiter +
-                         str(total_dur_avg_fix) + delimiter +
-                         str(total_dur_avg_move) + "\n")
+                         str(total_dur_avg) + "\n")
 
     report.close()
 
@@ -56,59 +55,34 @@ def drone_stats(info, delimiter=","):
     :param info: the information catched by drone
     :param delimiter: the delimiter of the data. Comma by default
     """
-
     GLO = time()
     file_name = "Drone_RealTime_" + str(GLO) + ".csv"
     total_events = info[0]
-    total_fix_events = info[1]
-    total_move_events = info[2]
-    count_different = info[3]
-    total_missed_events = info[4]
-    total_missed_fix_events = info[5]
-    total_missed_move_events = info[6]
-    rowDim = info[7]
-    colDim = info[8]
-    times_hasEvent = info[9]
-    total_visit = info[10]
-    round = info[11]
-    speed = info[12]
-    random = 1 if info[-1] == "random" else 0
-    lam_Buf = Board.lambdas[0]
-    lam_fix_Dur = Board.lambdas[1]
-    lam_move_Dur = Board.lambdas[2]
+    count_different = info[1]
+    rowDim = info[2]
+    colDim = info[3]
+    times_hasEvent = info[4]
+    total_visit = info[5]
+    round = info[6]
+    speed = info[7]
+    random = 1 if info[8] == "random" else 0
+    board_stats = Board.board_info
+    arrival_rate = Board.event_attr[0]
+    arrival_num =Board.event_attr[1]
+    die_rate = Board.event_attr[2]
+    probability = Board.indep_var[0]
+    lam_Dur = Board.indep_var[1]
     report = open(file_name, "w+")
-    report.write("dim_col,dim_row,round,drone_speed,sec_Buf,sec_fix_Dur,sec_move_Dur,lam_Buf,lam_fix_Dur,lam_move_Dur,"
-                 "random,col,row,time,event_type,event_id\n")
+    report.write("col,row,time,event_id,dim_col,dim_row,round,drone_speed,probability,arrival_rate,arrival_num,die_rate,sec_Dur,lam_Dur,random\n")
     hyper_params_vals = (str(colDim) + delimiter + str(rowDim) + delimiter + str(round) + delimiter + str(speed)
-                         + delimiter + str(cal_second(lam_Buf)) + delimiter + str(cal_second(lam_fix_Dur)) + delimiter
-                         + str(cal_second(lam_move_Dur)) + delimiter + str(lam_Buf) + delimiter
-                         + str(lam_fix_Dur) + delimiter + str(lam_move_Dur) + delimiter + str(random) + delimiter)
-    # for row in range(rowDim):
-    #     for col in range(colDim):
-    #         msd = "0"
-    #         if (col, row) in missed_events:
-    #             msd = str(missed_events[(col, row)])
-    #         if (col, row) in times_hasEvent.keys():
-    #             for id in times_hasEvent[(col, row)].keys():
-    #                 for t in times_hasEvent[(col, row)][id]:
-    #                     line = (str(col) + delimiter + str(row) + delimiter + str(t) + delimiter + str(id) + delimiter
-    #                             + msd + "\n")
-    #                     report.write(hyper_params_vals)
-    #                     report.write(line)
-    #         else:
-    #             coor = (str(col) + delimiter + str(row) + delimiter + "0" + delimiter + "0" + delimiter
-    #                    + msd + delimiter + "\n")
-    #             report.write(hyper_params_vals)
-    #             report.write(coor)
-    for row in range(rowDim):
-        for col in range(colDim):
-            events = times_hasEvent[(col, row)]
-            for e, times in events.items():
-                for t in times:
-                    line = str(str(col) + delimiter + str(row) + delimiter + str(t) + delimiter + str(type(e))
-                               + delimiter + str(e.id))
-                    report.write(hyper_params_vals)
-                    report.write(line)
+                         + delimiter + str(probability) + delimiter + str(arrival_rate) + delimiter + str(arrival_num)
+                         + delimiter + str(die_rate) + delimiter + str(cal_second(lam_Dur)) + delimiter
+                         + str(lam_Dur) + delimiter + str(random) + "\n")
+    for event in times_hasEvent:
+        for sector in times_hasEvent[event]:
+            for time in times_hasEvent[event][sector]:
+                line = (str(event.get_id()) + delimiter + str(sector[0]) + delimiter + str(sector[1]) + delimiter + str(time) + hyper_params_vals)
+                report.write(line)
     report.close()
 
 
@@ -121,36 +95,25 @@ def drone_total_stats(info, delimiter=","):
     GLO = time()
     file_name = "Drone_Total_" + str(GLO) + ".csv"
     total_events = info[0]
-    total_fix_events = info[1]
-    total_move_events = info[2]
-    count_different_fix = info[3]['EventFix']
-    count_different_move = info[3]['EventMove']
-    total_missed_events = info[4]
-    total_missed_fix_events = info[5]
-    total_missed_move_events = info[6]
-    rowDim = info[7]
-    colDim = info[8]
-    times_hasEvent = info[9]
-    total_visit = info[10]
-    round = info[11]
-    speed = info[12]
-    count = info[13]
-    random = 1 if info[-1] == "random" else 0
+    count_different = info[1]
+    total_missed_events = info[3]
+    rowDim = info[4]
+    colDim = info[5]
+    total_visit = info[7]
+    round = info[8]
+    speed = info[9]
+    count = info[10]
+    random = 1 if info[10] == "random" else 0
     lam_Buf = Board.lambdas[0]
-    lam_fix_Dur = Board.lambdas[1]
-    lam_move_Dur = Board.lambdas[2]
+    lam_Dur = Board.lambdas[1]
     report = open(file_name, "w+")
-    report.write("dim_col,dim_row,round,drone_speed,sec_Buf,sec_fix_Dur,sec_move_Dur,lam_Buf,lam_fix_Dur,lam_move_Dur,"
-                 "random,ttl_evnts,ttl_fix_evnts,ttl_move_evnts,ttl_diff_fix_evnts,ttl_diff_move_evnts,ttl_mssd_evnts,"
-                 "ttl_mssd_fix_evnts,ttl_mssd_move_evnts,ttl_vistd_sctrs,ttl_evnt_generate\n")
+    report.write("dim_col,dim_row,round,drone_speed,sec_Buf,sec_Dur,lam_Buf,lam_Dur,random,"
+                 "ttl_evnts,ttl_diff_evnts,ttl_mssd_evnts,ttl_vistd_sctrs,ttl_evnt_generate\n")
     hyper_params_vals = (str(colDim) + delimiter + str(rowDim) + delimiter + str(round) + delimiter + str(speed)
-                         + delimiter + str(cal_second(lam_Buf)) + delimiter + str(cal_second(lam_fix_Dur)) + delimiter
-                         + str(cal_second(lam_move_Dur)) + delimiter + str(lam_Buf) + delimiter + str(lam_fix_Dur)
-                         + delimiter + str(lam_move_Dur) + delimiter + str(random) + delimiter)
-    line = (str(total_events) + delimiter + str(total_fix_events) + delimiter + str(total_move_events) + delimiter +
-            str(count_different_fix) + delimiter + str(count_different_move) + delimiter
-            + str(total_missed_events) + delimiter + str(total_missed_fix_events) + delimiter
-            + str(total_missed_move_events) + delimiter + str(total_visit) + delimiter + str(count) + "\n")
+                         + delimiter + str(cal_second(lam_Buf)) + delimiter + str(cal_second(lam_Dur)) + delimiter
+                         + str(lam_Buf) + delimiter + str(lam_Dur) + delimiter + str(random) + delimiter)
+    line = (str(total_events) + delimiter + str(count_different) + delimiter
+            + str(total_missed_events) + delimiter + str(total_visit) + delimiter + str(count) + "\n")
     report.write(hyper_params_vals)
     report.write(line)
     report.close()
