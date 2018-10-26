@@ -219,7 +219,7 @@ class Drone:
         """
         return (self.total_events, self.count_different(),
                 self.__rowDimension, self.__colDimension,
-                self.times_hasEvent, self.total_visit, self.round, self.speed, self.count)
+                self.times_hasEvent, self.total_visit, self.round, self.speed)
 
     def get_time(self):
         """
