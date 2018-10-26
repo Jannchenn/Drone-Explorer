@@ -26,18 +26,21 @@ def board_stats(info, delimiter=","):
     total_dur_avg = info[4]
 
     report = open(file_name, "w")
-    report.write("dim_column,dim_row,buffer_seconds,duration_seconds,buffer_lambda,duration_lambda,"
-                 "column,row,max_id,"
-                 "average_buffer_time,average_duration_time,"
-                 "total_board_avg_buf,total_board_avg_dur\n")
+    report.write("dim_column,dim_row,duration_seconds,duration_lambda,probability,"
+                 "eventlife_seconds,eventlife_lambda,arrival_num,arrival_seconds,arrival_lambda,"
+                 "column,row,max_id,average_duration_time,total_board_avg_dur\n")
     for r in range(row):
         for c in range(col):
             report.write(str(col) + delimiter +
                          str(row) + delimiter +
-                         str(cal_second(float(Board.lambdas[0]))) + delimiter +
-                         str(cal_second(float(Board.lambdas[1]))) + delimiter +
-                         Board.lambdas[0] + delimiter +
-                         Board.lambdas[1] + delimiter +
+                         str(cal_second(float(Board.indep_var[1]))) + delimiter +
+                         Board.indep_var[1] + delimiter +
+                         Board.prob + delimiter +
+                         str(cal_second(float(Board.event_attr[0]))) + delimiter +
+                         Board.event_attr[0] + delimiter +
+                         Board.event_attr[1] + delimiter +
+                         str(cal_second(float(Board.event_attr[2]))) + delimiter +
+                         Board.event_attr[2] + delimiter +
                          str(c) + delimiter +
                          str(r) + delimiter +
                          str(board[c][r].id) + delimiter +
