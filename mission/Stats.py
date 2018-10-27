@@ -22,13 +22,12 @@ def board_stats(info, delimiter=","):
     col = info[0]
     row = info[1]
     board = info[2]
-    total_buf_avg = info[3]
-    total_dur_avg = info[4]
+    total_dur_avg = info[3]
 
     report = open(file_name, "w")
     report.write("dim_column,dim_row,duration_seconds,duration_lambda,probability,"
                  "eventlife_seconds,eventlife_lambda,arrival_num,arrival_seconds,arrival_lambda,"
-                 "column,row,max_id,average_duration_time,total_board_avg_dur\n")
+                 "column,row,average_duration_time,total_board_avg_dur\n")
     for r in range(row):
         for c in range(col):
             report.write(str(col) + delimiter +
@@ -43,10 +42,7 @@ def board_stats(info, delimiter=","):
                          Board.event_attr[2] + delimiter +
                          str(c) + delimiter +
                          str(r) + delimiter +
-                         str(board[c][r].id) + delimiter +
-                         str(board[c][r].buf/board[c][r].id) + delimiter +
-                         str(board[c][r].dur/board[c][r].id) + delimiter +
-                         str(total_buf_avg) + delimiter +
+                         str(board[c][r].time_with_events/board[c][r].num_of_events) + delimiter +
                          str(total_dur_avg) + "\n")
 
     report.close()
@@ -69,12 +65,17 @@ def drone_stats(info, delimiter=","):
     round = info[6]
     speed = info[7]
     random = 1 if info[8] == "random" else 0
-    lam_Buf = Board.lambdas[0]
-    lam_Dur = Board.lambdas[1]
+    board_stats = Board.board_info
+    arrival_rate = Board.event_attr[0]
+    arrival_num =Board.event_attr[1]
+    die_rate = Board.event_attr[2]
+    probability = Board.indep_var[0]
+    lam_Dur = Board.indep_var[1]
     report = open(file_name, "w+")
-    report.write("col,row,time,event_id,dim_col,dim_row,round,drone_speed,probability,sec_Dur,lam_Dur,random\n")
+    report.write("col,row,time,event_id,dim_col,dim_row,round,drone_speed,probability,arrival_rate,arrival_num,die_rate,sec_Dur,lam_Dur,random\n")
     hyper_params_vals = (str(colDim) + delimiter + str(rowDim) + delimiter + str(round) + delimiter + str(speed)
-                         + delimiter + str(probability) + delimiter + str(cal_second(lam_Dur)) + delimiter
+                         + delimiter + str(probability) + delimiter + str(arrival_rate) + delimiter + str(arrival_num)
+                         + delimiter + str(die_rate) + delimiter + str(cal_second(lam_Dur)) + delimiter
                          + str(lam_Dur) + delimiter + str(random) + "\n")
     for event in times_hasEvent:
         for sector in times_hasEvent[event]:

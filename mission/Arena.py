@@ -23,6 +23,8 @@ class Arena:
         long = 0
         id = 0
         event_list = []
+        num_of_events = 0
+        time_with_events = 0
 
     # ===============================================================
     # =                         Constructor
@@ -44,7 +46,6 @@ class Arena:
         self.__agentdir = 0
         self.__eventqueue = []
         self.__total_events = 0
-        self.__total_buf = 0
         self.__total_dur = 0
         self.arrival_rate = arrival_rate
         self.arrival_num = arrival_num
@@ -107,9 +108,13 @@ class Arena:
             new_event.update_sector(c, r)
             new_event.update_die_time(time.time())
             new_event.update_next_sector()
-            new_event.update_next_move_time(time.time() + self.stay_expo())
+            stay_time = self.stay_expo()
+            new_event.update_next_move_time(time.time() + stay_time)
             self.__board[c][r].event_list.append(new_event)
             self.__total_events += 1
+            self.__board[c][r].num_of_events += 1
+            self.__board[c][r].time_with_events += stay_time
+            self.__total_dur += stay_time
             self.next_add_event_time = time.time() + self.arrival_rate()
 
     def __addEventTimes(self):
@@ -144,10 +149,14 @@ class Arena:
                             cur_r = event.next_r
                             event.update_sector(cur_c, cur_r)
                             event.update_next_sector()
-                            event.update_next_move_time(self.stay_expo())
+                            stay_time = self.stay_expo()
+                            event.update_next_move_time(stay_time)
                             self.__board[c][r].event_list.remove(event)
                             length -= 1
                             self.__board[cur_c][cur_r].event_list.append(event)
+                            self.__board[cur_c][cur_r].num_of_events += 1
+                            self.__board[cur_c][cur_r].time_with_events += stay_time
+                            self.__total_dur += stay_time
                         else:
                             count += 1
 
@@ -213,16 +222,9 @@ class Arena:
 
         # board_info = Arena(33.24532, 53.12354, time.time())
 
-    def get_average_buf(self):
-        """
-        This method will calculate the average buffer time
-        :return: the average buffer time
-        """
-        return self.__total_buf/self.__total_events
-
     def get_average_dur(self):
         """
-        This method will calculate the average dutation time
+        This method will calculate the average duration time
         :return: the average duration time
         """
         return self.__total_dur/self.__total_events
@@ -232,7 +234,7 @@ class Arena:
         This function will return a tuple of information about the board
         :return: a tuple of information about the board
         """
-        return self.__colDimension, self.__rowDimension, self.__board, self.get_average_buf(), self.get_average_dur()
+        return self.__colDimension, self.__rowDimension, self.__board, self.get_average_dur()
 
 
 
