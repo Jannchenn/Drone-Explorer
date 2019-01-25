@@ -50,7 +50,7 @@ class Event:
 
     def update_next_sector(self):
         numbers = [i for i in range(1000)]
-        stay = numbers[:self.probability*1000]
+        stay = numbers[:int(self.probability*1000)]
         i = random.randint(0, 999)
         if i in stay:
             self.next_c, self.next_r = self.cur_c, self.cur_r
@@ -94,31 +94,31 @@ def next_sector(c, r, col_dim, row_dim):
 
     if c == 0 and r == 0:
         available = [up, right]
-        return available[random.randint(2)]
+        return available[random.randint(0,1)]
     elif c == 0 and r == row_dim:
         available = [down, right]
-        return available[random.randint(2)]
+        return available[random.randint(0,1)]
     elif c == col_dim and r == 0:
         available = [left, up]
-        return available[random.randint(2)]
+        return available[random.randint(0,1)]
     elif c == col_dim and r == row_dim:
         available = [left, down]
-        return available[random.randint(2)]
+        return available[random.randint(0,1)]
     elif c == 0:
         available = [up, down, right]
-        return available[random.randint(3)]
+        return available[random.randint(0,2)]
     elif c == col_dim:
         available = [left, up, down]
-        return available[random.randint(3)]
+        return available[random.randint(0,2)]
     elif r == 0:
         available = [left, right, up]
-        return available[random.randint(3)]
+        return available[random.randint(0,2)]
     elif r == row_dim:
         available = [left, right, down]
-        return available[random.randint(3)]
+        return available[random.randint(0,2)]
     else:
         available = [left, right, up, down]
-        return available[random.randint(4)]
+        return available[random.randint(0,3)]
 
 
 

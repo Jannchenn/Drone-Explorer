@@ -27,11 +27,11 @@ else:
     col = int(paras[0].split()[1])
     event_attr = paras[1].split()
 
-    prob = indep_var[0]
+    prob = float(indep_var[0])
     dur_dist = Distribution.Distribution(float(indep_var[1]))
-    arrival_rate = Distribution.Distribution(float(event_attr[0]))
-    arrival_num = event_attr[1]
-    die_rate = Distribution.Distribution(float(event_attr[2]))
+    arrival_rate = Distribution.Distribution(float(event_attr[0])) #expo
+    arrival_num = int(event_attr[1])
+    die_rate = Distribution.Distribution(float(event_attr[2])) #expo
     board_info = Arena.Arena(-35.36323782441763, 149.16522927736207, row, col, arrival_rate.exponential, arrival_num,
                              prob, dur_dist.exponential, die_rate.exponential)
     # pass board thread to drone

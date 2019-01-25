@@ -5,7 +5,7 @@
 #
 # ======================================================================
 
-para = open("paras.txt", "r")
+para = open("fix_paras.txt", "r")
 lines = para.readlines()
 col_row = lines[0]
 dist = lines[1]
@@ -15,7 +15,7 @@ t = open("time.txt", "r")
 time = t.readline()
 t.close()
 
-pw = open("paras.txt", "w")
+pw = open("fix_paras.txt", "w")
 pw.write(col_row)
 pw.write(dist)
 pw.write("random\n")
