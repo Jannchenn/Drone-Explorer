@@ -12,7 +12,7 @@
 import Drone
 import Policy
 import Board
-import Stats
+import simple_stats
 from time import time
 
 
@@ -30,6 +30,18 @@ def get_paras():
         f.close()
         return paras
 
+def get_avg(file_name):
+    record = open(file_name, "w")
+    total = 0
+    counter = 0
+    for line in record.readlines():
+        if line != "":
+            total += float(line)
+            counter += 1
+    record.close()
+    return total/counter
+
+
 
 if __name__ == "__main__":
     #Parameters.Parameters().run()
@@ -45,14 +57,14 @@ if __name__ == "__main__":
     else:
         drone = Drone.Drone(board, policy.random, paras[-2], (int(paras[-1]) if paras[-2] == "movement" else float(paras[-1])), row, col)
     drone.run()
-    drone_info = drone.get_stats_info()
-    drone_info = drone_info + (paras[-3], )
+    #drone_info = drone.get_stats_info()
+    #drone_info = drone_info + (paras[-3], )
     board_info = Board.board_info.get_board_info()
     t = drone.get_time()
-    Stats.board_stats(board_info)
-    Stats.drone_stats(drone_info)
-    Stats.drone_total_stats(drone_info)
-    Stats.time_info(t[0], t[1])
+    simple_stats.stats(board_info)
+    #Stats.drone_stats(drone_info)
+    #Stats.drone_total_stats(drone_info)
+    #Stats.time_info(t[0], t[1])
     update_thread.stop = True
     update_thread.join()
 
