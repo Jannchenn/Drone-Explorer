@@ -1,6 +1,7 @@
 import os
 from collections import defaultdict
 
+
 def write_report(root, dest, name):
     '''
     reads the files from a given directory and
