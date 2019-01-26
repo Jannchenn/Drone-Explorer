@@ -251,10 +251,13 @@ class Drone:
         missed_events = self.total_missed_events()
         missed_fix_events = missed_events[0]
         missed_move_events = missed_events[1]
-        return (self.total_fix_events + self.total_fix_events, self.total_fix_events, self.total_move_events,
+        return (self.total_fix_events + self.total_move_events, self.total_fix_events, self.total_move_events,
                 self.count_different(), missed_events, missed_fix_events, missed_move_events,
                 self.__rowDimension, self.__colDimension,
                 self.times_hasEvent, self.total_visit, self.round, self.speed, Event.EventFix.event_id+Event.EventMove.event_id-2)
+
+    def get_total_caught_event(self):
+        return self.total_fix_events + self.total_move_events
 
     def get_time(self):
         """
