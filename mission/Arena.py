@@ -320,3 +320,6 @@ class Arena():
         :return: a tuple of information about the board
         """
         return self.__colDimension, self.__rowDimension, self.get_average_buf(), self.get_average_dur_fix(), self.get_average_dur_move()
+
+    def get_total_events(self):
+        return self.__total_events
