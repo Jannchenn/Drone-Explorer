@@ -236,5 +236,8 @@ class Arena:
         """
         return self.__colDimension, self.__rowDimension, self.__board, self.get_average_dur()
 
+    def get_total_events(self):
+        return self.__total_events
+
 
 

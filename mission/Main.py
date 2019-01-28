@@ -12,7 +12,7 @@
 import Drone
 import Policy
 import Board
-import Stats
+import WriteReport
 from time import time
 
 
@@ -45,14 +45,17 @@ if __name__ == "__main__":
     else:
         drone = Drone.Drone(board, policy.random, paras[-2], (int(paras[-1]) if paras[-2] == "movement" else float(paras[-1])), row, col)
     drone.run()
-    drone_info = drone.get_stats_info()
-    drone_info = drone_info + (paras[-3], )
-    board_info = Board.board_info.get_board_info()
-    t = drone.get_time()
-    Stats.board_stats(board_info)
-    Stats.drone_stats(drone_info)
-    Stats.drone_total_stats(drone_info)
-    Stats.time_info(t[0], t[1])
+    # drone_info = drone.get_stats_info()
+    # drone_info = drone_info + (paras[-3], )
+    # board_info = Board.board_info.get_board_info()
+    # t = drone.get_time()
+    # Stats.board_stats(board_info)
+    # Stats.drone_stats(drone_info)
+    # Stats.drone_total_stats(drone_info)
+    # Stats.time_info(t[0], t[1])
+    total_events = Board.board_info.get_total_events()
+    total_caught_events = drone.get_total_caught_event()
+    WriteReport.stats(total_events, total_caught_events)
     update_thread.stop = True
     update_thread.join()
 

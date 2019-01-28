@@ -52,6 +52,12 @@ def generate_prob_file(prob,dur_lambda,arr_l,arr_num,die_l,var,random,row,col,ca
     report.close()
 
 
+def stats(total_events, total_caught_events):
+    file_name = "catch_rate.txt"
+    report = open(file_name, "a")
+    report.write(str(total_events/total_caught_events) + '\n')
+
+
 if __name__ == "__main__":
     try:
         prob = sys.argv[1]

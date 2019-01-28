@@ -228,6 +228,9 @@ class Drone:
         """
         return self.start, self.end
 
+    def get_total_caught_event(self):
+        return self.total_events
+
 
 def get_distance_metres(aLocation1, aLocation2):
     """
