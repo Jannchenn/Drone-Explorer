@@ -13,30 +13,27 @@ import threading
 import Distribution
 
 try:
-    f1 = open("paras.txt", "r")
+    f1 = open("fix_paras.txt", "r")
     f2 = open("boardinput.txt", "r")
 except IOError:
-    print "Cannot open paras.txt"
+    print "Cannot open"
 else:
     paras = f1.read().split('\n')
-    lambdas = f2.read().split('\n')[0].split()
+    indep_var = f2.read().split('\n')[0].split()
     f1.close()
     f2.close()
+
     row = int(paras[0].split()[0])
     col = int(paras[0].split()[1])
-    etype = paras[1].split()[0]
-    dis = paras[2]
-    initial = int(paras[1].split()[1])
+    #event_attr = paras[1].split()
 
-    buf_dist = Distribution.Distribution(float(lambdas[0]))
-    dur_dist_fix = Distribution.Distribution(float(lambdas[1]))
-    dur_dist_move = Distribution.Distribution(float(lambdas[2]))
-    if dis == "expo":
-        board_info = Arena.Arena(-35.36323782441763, 149.16522927736207, time.time(), row, col, etype, dur_dist_move.exponential,
-                                 dur_dist_fix.exponential, buf_dist.exponential, initial)
-    else:
-        board_info = Arena.Arena(-35.36323782441763, 149.16522927736207, time.time(), row, col, etype, dur_dist_move.exponential,
-                                 dur_dist_fix.exponential, buf_dist.random20, initial)
+    prob = float(indep_var[0])
+    dur_dist = Distribution.Distribution(float(indep_var[1]))
+    arrival_rate = Distribution.Distribution(float(indep_var[2])) #expo
+    arrival_num = int(indep_var[-2])
+    die_rate = Distribution.Distribution(float(indep_var[-1])) #expo
+    board_info = Arena.Arena(-35.36323782441763, 149.16522927736207, row, col, arrival_rate.exponential, arrival_num,
+                             prob, dur_dist.exponential, die_rate.exponential)
     # pass board thread to drone
     board = board_info.get_longlat()
 

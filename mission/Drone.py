@@ -10,8 +10,8 @@ import time
 import math
 from random import randrange
 import Board
-from collections import defaultdict
 import Event
+from collections import defaultdict
 
 board_info = Board.board_info  # The board that keeps updating events
 
@@ -24,18 +24,18 @@ class Drone:
     class __Tile:
         last_time_visit = 0
         has_event = False
-        id = defaultdict(list)
+        id = 0
 
     def __init__(self, board, policy, fix, r, row, col):
         """
-         Initializes drone flight characteristcs
-        :param parser:
-        :param my_time: current time
-        :param time_arrived:
+        Initializes drone flight characteristcs
+        :param board: The board for the drone to explore
         :param policy: function of direction drone will fly
         :param fix: a string that determines if the drone's flight is limited to movement or time
-        :param round: integer of number of times drone will look for an event if drone flies accorrding to a fixed movment
+        :param r: integer of number of times drone will look for an event if drone flies according to a fixed movment
                       integer of number of minutes if drone flies according to fixed time
+        :param row: the row number of the drone
+        :param col: the col number of the drone
         """
         self.parser = argparse.ArgumentParser(description='commands')
         self.parser.add_argument('--connect')
@@ -47,14 +47,14 @@ class Drone:
         self.__colDimension = col
         self.__rowDimension = row
 
-        # self.times_arrived = defaultdict(int)
+        # self.times_arrived = defaultd
+        # ict(int)
         val = lambda: defaultdict(list)
         self.times_hasEvent = defaultdict(val)
         self.total_visit = 0
-        self.total_fix_events = 0
-        self.total_move_events = 0
+        self.total_events = 0
         self.movements = list()
-        self.missed = defaultdict()
+        self.missed = defaultdict(int)
         self.start = 0
         self.end = 0
         self.count = 0
@@ -94,6 +94,84 @@ class Drone:
 
             time.sleep(1)
 
+    def count_different(self):
+        """
+        :return: the number of different events
+        """
+        return len(self.times_hasEvent)
+
+    def missed_events(self):
+        """
+        Updates self.missed so that track the missed events for each sector.
+        :return: the total number of events generated
+        """
+        count = 0
+        for row in range(self.__rowDimension):
+            for col in range(self.__colDimension):
+                max_id = board_info.get_max_id(col, row)
+                count += max_id
+                if (col, row) not in self.times_hasEvent.keys():
+                    self.missed[(col, row)] += max_id
+                else:
+                    events = self.times_hasEvent[(col, row)].keys()
+                    for i in range(max_id):
+                        if i + 1 not in events:
+                            self.missed[(col, row)] += 1
+        return count
+
+    def total_missed_events(self):
+        """
+        This method will count the TOTAL missed events
+        """
+        result = 0
+        for val in self.missed.values():
+            result += val
+        return result
+
+    def collect_data(self, c, r, wpl):
+        """
+        For each sector we reached, we need to collect information from it, aka fly log
+        :param c: the coloum of the board; r: the row of the board; wpl: the loaction of the sector
+        """
+        while (get_distance_metres(self.vehicle.location.global_relative_frame, wpl) > 2):
+            print(get_distance_metres(self.vehicle.location.global_relative_frame, wpl))
+            time.sleep(0.1)
+            #print("NOT ARRIVED")
+        print("ARRIVED")
+        # Collect and update explore map
+        self.total_visit += 1
+        self.movements.append((c, r))
+        # self.times_arrived[(c, r)] += 1
+
+        now_time = time.time()
+        self.explore[c][r].last_time_visit = now_time
+        # has_event = board_info.get_event(c, r)
+        # event_id = board_info.get_id(c, r)
+        events = board_info.get_event(c, r)
+        has_event = False
+        event_id = []
+        if events:
+            has_event = True
+            self.total_events += len(events)
+            for event in events:
+                event_id.append(event.id)
+                self.times_hasEvent[event][(c, r)].append(now_time)
+        self.explore[c][r].has_event = has_event
+        self.explore[c][r].id = event_id
+
+        print("EVENT: " + str(has_event))
+
+    def fly(self):
+        """
+        fly the drone according to the policy
+        """
+        data = self.policy()
+        c = data[0]
+        r = data[1]
+        wpl = data[2]
+        self.vehicle.simple_goto(wpl)
+        self.collect_data(c, r, wpl)
+
     def run(self):
         """
         flies vehicle according to fixed time or fixed movement, which is
@@ -122,7 +200,7 @@ class Drone:
                 self.fly()
 
         self.end = time.time()
-        #self.count = self.missed_events()
+        self.count = self.missed_events()
 
         # ------ Coming back
         print("Coming back")
@@ -135,126 +213,13 @@ class Drone:
 
         # self.stats()
 
-    def fly(self):
-        """
-        fly the drone according to the policy
-        """
-        data = self.policy()
-        c = data[0]
-        r = data[1]
-        wpl = data[2]
-        self.vehicle.simple_goto(wpl)
-        self.collect_data(c, r, wpl)
-
-    def collect_data(self, c, r, wpl):
-        """
-        For each sector we reached, we need to collect information from it, aka fly log
-        :param c: the coloum of the board; r: the row of the board; wpl: the loaction of the sector
-        """
-        while (get_distance_metres(self.vehicle.location.global_relative_frame, wpl) > 2):
-            print(get_distance_metres(self.vehicle.location.global_relative_frame, wpl))
-            time.sleep(0.1)
-            #print("NOT ARRIVED")
-        print("ARRIVED")
-        # Collect and update explore map
-        self.total_visit += 1
-        self.movements.append((c, r))
-        # self.times_arrived[(c, r)] += 1
-
-        now_time = time.time()
-        #self.explore[c][r].last_time_visit = now_time
-        has_event = board_info.get_event(c, r)
-        events = board_info.get_current_event_status(c, r)
-        for event in events:
-            self.times_hasEvent[(c, r)][event].append(now_time)
-            if type(event) is Event.EventFix:
-                self.total_fix_events += 1
-            else:
-                self.total_move_events += 1
-        #event_id = board_info.get_id(c, r, now_time)  # it's a list result = ['EventFix':[], 'EventMove':[]]
-        # if has_event:
-        #     for k, v in event_id:
-        #         if k == "EventFix":
-        #             self.total_fix_events += 1
-        #             self.times_hasEvent[(c,r)]['Fix'].extend(event_id['EventFix'])
-        #         else:
-        #             self.total_move_events += 1
-        #             self.times_hasEvent[(c,r)]['Move'].extend(event_id['EventMove'])
-                #self.total_events += 1
-                #self.times_hasEvent[(c, r)][event_id].append(now_time)
-        #self.explore[c][r].has_event = has_event
-        #self.explore[c][r].id = event_id
-
-        print("EVENT: " + str(has_event))
-
-    def count_different(self):
-        """
-        :return: the number of different events; result={'EventMove':100, 'EventFix':193}
-        """
-        result = defaultdict(int)
-        for each in self.times_hasEvent.values():
-            for event in each.keys():
-                if type(event) is Event.EventFix:
-                    result['EventFix'] += 1
-                else:
-                    result['EventMove'] += 1
-        return result
-
-    def missed_events(self):
-        """
-        Updates self.missed so that track the missed events for each sector.
-        :return: the total number of events generated
-        """
-        count = 0
-        for row in range(self.__rowDimension):
-            for col in range(self.__colDimension):
-                max_id = board_info.get_max_id(col, row)
-                count += max_id
-                if (col, row) not in self.times_hasEvent.keys():
-                    self.missed[(col, row)] += max_id
-                else:
-                    events = self.times_hasEvent[(col, row)].keys()
-                    for i in range(max_id):
-                        if i + 1 not in events:
-                            self.missed[(col, row)] += 1
-        return count
-
-    def total_missed_events(self):
-        """
-        This method will count the TOTAL missed events
-        """
-        # result = 0
-        # for val in self.missed.values():
-        #     result += val
-        # return result
-        set_move = set()
-        set_fix = set()
-        max_id = board_info.get_max_both_id()
-        fix = max_id[0]
-        move = max_id[1]
-        for each in self.times_hasEvent.values():
-            for event in each.keys():
-                if type(event) is Event.EventFix:
-                    if event not in set_fix:
-                        set_fix.add(event)
-                        fix -= 1
-                else:
-                    if event not in set_move:
-                        set_move.add(event)
-                        move -= 1
-        return [fix, move]
-
     def get_stats_info(self):
         """
         returns a tuple that contains all the information needed
         """
-        missed_events = self.total_missed_events()
-        missed_fix_events = missed_events[0]
-        missed_move_events = missed_events[1]
-        return (self.total_fix_events + self.total_fix_events, self.total_fix_events, self.total_move_events,
-                self.count_different(), missed_events, missed_fix_events, missed_move_events,
+        return (self.total_events, self.count_different(),
                 self.__rowDimension, self.__colDimension,
-                self.times_hasEvent, self.total_visit, self.round, self.speed, Event.EventFix.event_id+Event.EventMove.event_id-2)
+                self.times_hasEvent, self.total_visit, self.round, self.speed)
 
     def get_time(self):
         """
@@ -262,6 +227,9 @@ class Drone:
         :return: a tuple of start and end time
         """
         return self.start, self.end
+
+    def get_total_caught_event(self):
+        return self.total_events
 
 
 def get_distance_metres(aLocation1, aLocation2):

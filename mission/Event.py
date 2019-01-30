@@ -1,120 +1,128 @@
 # ======================================================================
 # FILE:        Event.py
 #
-# DESCRIPTION: This file contains EventFix and EventMove class.
-#               This class will handle the fix event (distribution...),
-#               and another EventMove class will handle movement events
+# DESCRIPTION: This file contains Event class, which will represent each
+#               Event in the map
 #
 # ======================================================================
 
+import Distribution
 from collections import defaultdict
 import random
 
 
 class Event:
-    sector_id = defaultdict(int)
-
-    def __init__(self, dur_dis):
-        self.dur = dur_dis
-        self.start_time = 0
-        self.finish_time = 0
-
-    def update_sector_id(self, c, r):
-        """
-        This function will update event id for corresponding sectors. It just record how many events
-        a sector already has
-        :param c: the sector column
-        :param r: the sector row
-        """
-        self.sector_id[(c, r)] += 1
-
-    def get_sector_ids(self):
-        return self.sector_id
-
-    def get_dur_time(self):
-        """
-        This function will return a duration time for a curtain event.
-        :return: a float that indicating duration time based on certain distribution
-        """
-        return self.dur()
-
-
-class EventFix(Event):
     event_id = 1
 
-    def __init__(self, dur_dis, buf_dis):
+    def __init__(self, prob, lifetime, col, row):
         """
-        :param buf_dis: buffer time beween events
-        :param dur_dis: duration time of events
+        The class has two parameters
+        :param prob: The probability the the event will move
+        :param lifetime: The exponential distribution of the life time of the event
+        :param expo: The duration that the event will stay in the same place(sector)
+        :param col: The column dimension of the map
+        :param row: The row dimension of the map
         """
-        Event.__init__(self, dur_dis)
-        # may update other features and parameters later
-        self.buf = buf_dis
-        self.id = EventFix.event_id
-        EventFix.event_id += 1
-
-    def get_buf_time(self):
-        """
-        This function will return a buffer time for a curtain event.
-        :return: a float that indicating buffer time based on certain distribution
-        """
-        return self.buf()
-
-
-class EventMove(Event):
-    event_id = 1
-
-    def __init__(self, dur_dis, col, row):
-        Event.__init__(self, dur_dis)
-        self.next_coor = (0, 0)
         self.col_dim = col
         self.row_dim = row
-        self.id = EventMove.event_id
-        EventMove.event_id += 1
+        self.probability = prob
+        self.life_time_expo = lifetime
+        self.die_time = 0
+        self.finish_time = 0
+        self.id = Event.event_id
+        Event.event_id += 1
+        self.travel_history = defaultdict(int)
+        self.cur_c = -1
+        self.cur_r = -1
+        self.next_c = -1
+        self.next_r = -1
 
-    def update_next_sector(self, c, r):
+    def update_sector(self, c, r):
         """
-        This method will update the next available coordinate for the event
-        :param c: the current column
-        :param r: the current row
+        This function updates the travel history of this event
+        :param c: col coordinate
+        :param r: row coordinate
+        :return:
         """
-        left = (c - 1, r)
-        right = (c + 1, r)
-        up = (c, r + 1)
-        down = (c, r - 1)
+        self.cur_c = c
+        self.cur_r = r
+        self.travel_history[(c, r)] += 1
 
-        if c == 0 and r == 0:
-            available = [up, right]
-            self.next_coor = available[random.randint(2)]
-        elif c == 0 and r == self.row_dim:
-            available = [down, right]
-            self.next_coor = available[random.randint(2)]
-        elif c == self.col_dim and r == 0:
-            available = [left, up]
-            self.next_coor = available[random.randint(2)]
-        elif c == self.col_dim and r == self.row_dim:
-            available = [left, down]
-            self.next_coor = available[random.randint(2)]
-        elif c == 0:
-            available = [up, down, right]
-            self.next_coor = available[random.randint(3)]
-        elif c == self.col_dim:
-            available = [left, up, down]
-            self.next_coor = available[random.randint(3)]
-        elif r == 0:
-            available = [left, right, up]
-            self.next_coor = available[random.randint(3)]
-        elif r == self.row_dim:
-            available = [left, right, down]
-            self.next_coor = available[random.randint(3)]
+    def update_next_sector(self):
+        numbers = [i for i in range(1000)]
+        stay = numbers[:int(self.probability*1000)]
+        i = random.randint(0, 999)
+        if i in stay:
+            self.next_c, self.next_r = self.cur_c, self.cur_r
         else:
-            available = [left, right, up, down]
-            self.next_coor = available[random.randint(4)]
+            goto_next = next_sector(self.cur_c, self.cur_r, self.col_dim, self.row_dim)
+            self.next_c, self.next_r = goto_next[0], goto_next[1]
 
-    def get_next_sector(self):
+    def update_die_time(self, cur_time):
         """
-        This method will get the next avaliable coordinate for the event
+        This function will update the death time as soon as an event set up
+        :param cur_time: the current time
+        :return:
         """
-        return self.next_coor
+        self.die_time = cur_time + self.life_time_expo()
+
+    def update_next_move_time(self, dur_time):
+        """
+        This function will update the next move time of the event
+        :param dur_time: The duration time of the event
+        :return:
+        """
+        self.finish_time += dur_time
+
+    def get_id(self):
+        return self.id
+
+
+def next_sector(c, r, col_dim, row_dim):
+    """
+    This function will tell you which quadrant the sector is
+    :param c: current column
+    :param r: current row
+    :param col_dim: Col num in the board
+    :param row_dim: Row num in the board
+    :return: The quadrant
+    """
+    left = (c - 1, r)
+    right = (c + 1, r)
+    up = (c, r + 1)
+    down = (c, r - 1)
+
+    if c == 0 and r == 0:
+        available = [up, right]
+        return available[random.randint(0,1)]
+    elif c == 0 and r == row_dim:
+        available = [down, right]
+        return available[random.randint(0,1)]
+    elif c == col_dim and r == 0:
+        available = [left, up]
+        return available[random.randint(0,1)]
+    elif c == col_dim and r == row_dim:
+        available = [left, down]
+        return available[random.randint(0,1)]
+    elif c == 0:
+        available = [up, down, right]
+        return available[random.randint(0,2)]
+    elif c == col_dim:
+        available = [left, up, down]
+        return available[random.randint(0,2)]
+    elif r == 0:
+        available = [left, right, up]
+        return available[random.randint(0,2)]
+    elif r == row_dim:
+        available = [left, right, down]
+        return available[random.randint(0,2)]
+    else:
+        available = [left, right, up, down]
+        return available[random.randint(0,3)]
+
+
+
+
+
 
 

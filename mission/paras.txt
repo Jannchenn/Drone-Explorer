@@ -1,6 +1,0 @@
-10 10
-both 0.5
-expo
-roomba
-movement
-10

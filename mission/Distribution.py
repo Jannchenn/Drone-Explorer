@@ -22,6 +22,4 @@ class Distribution:
         return time
 
     def exponential(self):
-        if self.var != 0:
-            return random.expovariate(self.var)
-        return 0
+        return random.expovariate(self.var)
