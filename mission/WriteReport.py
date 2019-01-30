@@ -30,6 +30,18 @@ def get_from_fix():
         return row, col
 
 
+def time_info(t1, t2):
+    """
+    This function will write the time result for each experiment
+    :param t1: the starting time
+    :param t2: the finishing time
+    """
+    file_name = "time.txt"
+    report = open(file_name, 'a')
+    report.write("\n" + str(t2-t1) + "\n")
+    report.close()
+
+
 def generate_prob_file(prob,dur_lambda,arr_l,arr_num,die_l,var,random,row,col,catch_rate, delimiter=","):
     """
     write a report about the original board
