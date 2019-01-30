@@ -72,9 +72,6 @@ def stats(total_events, total_caught_events):
     file_name = "catch_rate.txt"
     report = open(file_name, "a")
     rate = float(total_caught_events/total_events)
-    print(total_events,total_caught_events)
-    print(total_caught_events/total_events)
-    print(rate)
     report.write(str(float(rate)) + '\n')
     report.close()
 
