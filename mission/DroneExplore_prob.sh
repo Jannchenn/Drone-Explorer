@@ -13,12 +13,7 @@ do
         python Main.py --connect 127.0.0.1:14551
         ((counter++))
     done
-    # Move generated reports in to new folder
-#    folder="prob_${indep_var[0]}" # this one is just the probability change
-#    mkdir ${folder}
-#    mv Drone_* ${folder} #?
-#    mv Board_* ${folder} #?
-    python WriteReport.py ${indep_var[0]} "prob" "0"
+    python WriteReport.py ${indep_var[0]} ${indep_var[1]} ${indep_var[2]} ${indep_var[3]} ${indep_var[4]} "prob" "0"
 done < "$filename"
 python Avgtime.py # 算时间的，这样之后random的时间和Roomba是一样的
 
@@ -37,5 +32,5 @@ do
         python Main.py --connect 127.0.0.1:14551
         ((counter2++))
     done
-    python WriteReport.py ${indep_var[0]} "prob" "1"
+    python WriteReport.py ${indep_var[0]} ${indep_var[1]} ${indep_var[2]} ${indep_var[3]} ${indep_var[4]} "prob" "1"
 done < "$filename"

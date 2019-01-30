@@ -104,7 +104,7 @@ class Arena:
         for _ in range(self.arrival_num):
             c = random.randint(0,self.__colDimension-1)
             r = random.randint(0,self.__rowDimension-1)
-            new_event = Event(self.prob, self.die_expo, self.__colDimension, self.__rowDimension)
+            new_event = Event(self.prob, self.die_expo, self.__colDimension-1, self.__rowDimension-1)
             new_event.update_sector(c, r)
             new_event.update_die_time(time.time())
             new_event.update_next_sector()

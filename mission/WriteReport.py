@@ -2,7 +2,7 @@ import sys
 
 
 def generate_and_empty_average_file():
-    record = open("catch_rate.txt", "w")
+    record = open("catch_rate.txt", "r")
     total = 0
     counter = 0
     for line in record.readlines():
@@ -10,6 +10,8 @@ def generate_and_empty_average_file():
             total += float(line)
             counter += 1
     record.close()
+    record2 = open("catch_rate.txt", "w")
+    record2.close()
     return total / counter
 
 
@@ -55,7 +57,9 @@ def generate_prob_file(prob,dur_lambda,arr_l,arr_num,die_l,var,random,row,col,ca
 def stats(total_events, total_caught_events):
     file_name = "catch_rate.txt"
     report = open(file_name, "a")
-    report.write(str(total_events/total_caught_events) + '\n')
+    rate = total_events/total_caught_events
+    report.write(str(rate) + '\n')
+    report.close()
 
 
 if __name__ == "__main__":
