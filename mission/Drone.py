@@ -134,7 +134,7 @@ class Drone:
         :param c: the coloum of the board; r: the row of the board; wpl: the loaction of the sector
         """
         while (get_distance_metres(self.vehicle.location.global_relative_frame, wpl) > 2):
-            print(get_distance_metres(self.vehicle.location.global_relative_frame, wpl))
+            #print(get_distance_metres(self.vehicle.location.global_relative_frame, wpl))
             time.sleep(0.1)
             #print("NOT ARRIVED")
         print("ARRIVED")
@@ -159,7 +159,7 @@ class Drone:
         self.explore[c][r].has_event = has_event
         self.explore[c][r].id = event_id
 
-        print("EVENT: " + str(has_event))
+        #print("EVENT: " + str(has_event))
 
     def fly(self):
         """
@@ -242,8 +242,8 @@ def get_distance_metres(aLocation1, aLocation2):
     """
     dlat = aLocation2.lat - aLocation1.lat
     dlong = aLocation2.lon - aLocation1.lon
-    print ("target: " + str(aLocation2.lat) + " " + str(aLocation2.lon) + "/n")
-    print ("reached: " + str(aLocation1.lat) + " " + str(aLocation1.lon) + "/n")
+    #print ("target: " + str(aLocation2.lat) + " " + str(aLocation2.lon) + "/n")
+    #print ("reached: " + str(aLocation1.lat) + " " + str(aLocation1.lon) + "/n")
     return math.sqrt((dlat * dlat) + (dlong * dlong)) * 1.113195e5
 
 

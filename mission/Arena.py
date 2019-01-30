@@ -110,7 +110,9 @@ class Arena:
             new_event.update_next_sector()
             stay_time = self.stay_expo()
             new_event.update_next_move_time(time.time() + stay_time)
-            self.__board[c][r].event_list.append(new_event)
+            copy = list(self.__board[c][r].event_list)
+            copy.append(new_event)
+            self.__board[c][r].event_list = copy
             self.__total_events += 1
             self.__board[c][r].num_of_events += 1
             self.__board[c][r].time_with_events += stay_time

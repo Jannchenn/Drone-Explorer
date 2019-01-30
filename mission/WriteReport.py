@@ -1,3 +1,4 @@
+from __future__ import division
 import sys
 
 
@@ -5,6 +6,7 @@ def generate_and_empty_average_file():
     record = open("catch_rate.txt", "r")
     total = 0
     counter = 0
+    print("lll")
     for line in record.readlines():
         if line != "":
             total += float(line)
@@ -38,9 +40,9 @@ def generate_prob_file(prob,dur_lambda,arr_l,arr_num,die_l,var,random,row,col,ca
     file_name = var + "_var.csv"
 
     report = open(file_name, "a")
-    report.write("dim_column,dim_row,duration_lambda,probability,"
-                 "arrival_lambda,eventlife_lambda,arrival_num,"
-                 "catch_rate,random\n")
+    # report.write("dim_column,dim_row,duration_lambda,probability,"
+    #              "arrival_lambda,eventlife_lambda,arrival_num,"
+    #              "catch_rate,random\n")
     report.write(str(col) + delimiter +
                  str(row) + delimiter +
                  str(dur_lambda) + delimiter +
@@ -57,8 +59,11 @@ def generate_prob_file(prob,dur_lambda,arr_l,arr_num,die_l,var,random,row,col,ca
 def stats(total_events, total_caught_events):
     file_name = "catch_rate.txt"
     report = open(file_name, "a")
-    rate = total_events/total_caught_events
-    report.write(str(rate) + '\n')
+    rate = float(total_caught_events/total_events)
+    print(total_events,total_caught_events)
+    print(total_caught_events/total_events)
+    print(rate)
+    report.write(str(float(rate)) + '\n')
     report.close()
 
 
