@@ -1,4 +1,4 @@
 10 10
 random
 movement
-3
+100

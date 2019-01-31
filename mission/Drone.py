@@ -58,6 +58,7 @@ class Drone:
         self.start = 0
         self.end = 0
         self.count = 0
+        self.event_set = set()
 
         self.connection_string = self.args.connect
 
@@ -156,6 +157,7 @@ class Drone:
             for event in events:
                 event_id.append(event.id)
                 self.times_hasEvent[event][(c, r)].append(now_time)
+                self.event_set.add(event)
         self.explore[c][r].has_event = has_event
         self.explore[c][r].id = event_id
 
@@ -228,8 +230,11 @@ class Drone:
         """
         return self.start, self.end
 
-    def get_total_caught_event(self):
+    def get_total_caught_event_include_same(self):
         return self.total_events
+
+    def get_total_caught_event(self):
+        return len(self.event_set)
 
 
 def get_distance_metres(aLocation1, aLocation2):

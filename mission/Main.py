@@ -55,7 +55,9 @@ if __name__ == "__main__":
     WriteReport.time_info(t[0], t[1])
     total_events = Board.board_info.get_total_events()
     total_caught_events = drone.get_total_caught_event()
-    WriteReport.stats(total_events, total_caught_events)
+    total_caught_events_include_same = drone.get_total_caught_event_include_same()
+    WriteReport.stats(total_events, total_caught_events, "catch_rate.txt")
+    WriteReport.stats(total_events, total_caught_events_include_same, "catch_rate_include_same.txt")
     update_thread.stop = True
     update_thread.join()
 
