@@ -247,8 +247,8 @@ def get_distance_metres(aLocation1, aLocation2):
     """
     dlat = aLocation2.lat - aLocation1.lat
     dlong = aLocation2.lon - aLocation1.lon
-    #print ("target: " + str(aLocation2.lat) + " " + str(aLocation2.lon) + "/n")
-    #print ("reached: " + str(aLocation1.lat) + " " + str(aLocation1.lon) + "/n")
+    print ("target: " + str(aLocation2.lat) + " " + str(aLocation2.lon) + "/n")
+    print ("reached: " + str(aLocation1.lat) + " " + str(aLocation1.lon) + "/n")
     return math.sqrt((dlat * dlat) + (dlong * dlong)) * 1.113195e5
 
 
