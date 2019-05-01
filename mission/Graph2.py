@@ -3,8 +3,11 @@
 Created on Sun Jun  3 02:07:39 2018
 Drone Fixed Duration Graph
 @author: hahnara
+Instructions:
+1) create Graph object that takes file path as argument in main.
+2) to update y axis variables, change self.cols array elements to name of columns in read_csv
+3) update y_col1 or y_col2 to which "catch_rate" data you want
 """
-#note to Hahnara: plot board stats on same graph could help gain perspective
 
 import matplotlib.pyplot as plt
 import pandas as pd
@@ -50,21 +53,24 @@ class Graph():
             x_col: x data
             y_col: y data
         """
-        # Graph Labels 
+        # Graph Labels
         title = self.data
+        # y label
         y_type = 'Catch Rate Include Same'
-        
+
         # Dataset Labels
         y_col1 = 'catch_rate'
         y_col2 = 'catch_rate_include_same'
 
         # Extract X dataset
         dataset = pd.read_csv(self.data)
+
+        # split up dataset two separate datasets: random and roomba
         random_ds = dataset[(dataset['random'] == 1)]
         roomba_ds = dataset[(dataset['random'] == 0)]
 
         # Extract Y dataset
-        # Note: random_data and roomba_ds have same data for y2 to y4
+        # Note: random_data and roomba_ds have same data for y2 - y4
         X_axis = random_ds[self.x_val]
         y2 = random_ds[self.cols[0]].div(100)
         y3 = random_ds[self.cols[1]].div(100)
@@ -72,12 +78,12 @@ class Graph():
         #y_random_catch = random_ds[y_col1]
         #y_roomba_catch = roomba_ds[y_col1]
         y_random_catch = random_ds[y_col2]          # same
-        y_roomba_catch = roomba_ds[y_col2]          # same 
-        
+        y_roomba_catch = roomba_ds[y_col2]          # same
+
         # line graph
         plt.plot(X_axis, y_random_catch, 'b-',X_axis, y_roomba_catch, 'r-',
                 X_axis, y2, 'c-', X_axis, y3, 'y-',X_axis, y4, 'g-')
-        
+
         # scatter plot
         plt.plot(X_axis, y_random_catch, 'bo',  X_axis, y_roomba_catch, 'ro',
                  X_axis, y2, 'co', X_axis, y3, 'yo', X_axis, y4, 'go')
@@ -109,4 +115,3 @@ graph4 = Graph('prob_var.csv')
 graph1.make_plot()
 graph2.make_plot()
 graph4.make_plot()
-
