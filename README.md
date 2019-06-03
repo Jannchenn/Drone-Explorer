@@ -61,6 +61,7 @@ Finally, after it finishes, a corresponding csv file will be generated.
 
 
 ## File Descriptions
+More details are documented in each file
 ### Arena.py
 This file contains Arena class, which contains the map that our agent(UAV) is going to explore
 ### Avgtime.py
