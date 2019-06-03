@@ -70,7 +70,6 @@ class Policy():
         """
         c = self.cur[0]
         r = self.cur[1]
-        print(c, r)
         d = self._find_dir(self.start[1], self.end[1])
         if c == self.end[0] and r == self.end[1]:
             self.start = (self.end[0], self.end[1])

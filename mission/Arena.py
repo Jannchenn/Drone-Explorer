@@ -53,6 +53,7 @@ class Arena:
         self.stay_expo = expo
         self.die_expo = die_expo
         self.next_add_event_time = 0
+        self.__events = dict()
         # may update other features and parameters later
         #self.__buf_dis = buf_dis
         #self.__dur_dis = dur_dis
@@ -62,6 +63,7 @@ class Arena:
         self.__board = [[self.__Tile() for j in range(self.__colDimension)] for i in range(self.__rowDimension)]
         self.__addLongLat(my_lat, my_lon)
         self.__addEventTimes()
+        
 
     # ===============================================================
     # =             Arena Generation Functions
@@ -105,12 +107,15 @@ class Arena:
             c = random.randint(0,self.__colDimension-1)
             r = random.randint(0,self.__rowDimension-1)
             new_event = Event(self.prob, self.die_expo, self.__colDimension-1, self.__rowDimension-1)
+            self.__events[new_event] = (c, r)
             new_event.update_sector(c, r)
             new_event.update_die_time(time.time())
             new_event.update_next_sector()
             stay_time = self.stay_expo()
             new_event.update_next_move_time(time.time() + stay_time)
-            self.__board[c][r].event_list.append(new_event)
+            copy = list(self.__board[c][r].event_list)
+            copy.append(new_event)
+            self.__board[c][r].event_list = copy
             self.__total_events += 1
             self.__board[c][r].num_of_events += 1
             self.__board[c][r].time_with_events += stay_time
@@ -134,31 +139,30 @@ class Arena:
         :return: None
         """
         time_now = time.time()
-        for r in range(self.__rowDimension):
-            for c in range(self.__colDimension):
-                length = len(self.__board[c][r].event_list)
-                count = 0
-                while count < length:
-                    event = self.__board[c][r].event_list[count]
-                    if time_now >= event.die_time:  # event are going to die
-                        self.__board[c][r].event_list.remove(event)
-                        length -= 1
-                    else:
-                        if time_now > event.finish_time:  # event need to move
-                            cur_c = event.next_c
-                            cur_r = event.next_r
-                            event.update_sector(cur_c, cur_r)
-                            event.update_next_sector()
-                            stay_time = self.stay_expo()
-                            event.update_next_move_time(stay_time)
-                            self.__board[c][r].event_list.remove(event)
-                            length -= 1
-                            self.__board[cur_c][cur_r].event_list.append(event)
-                            self.__board[cur_c][cur_r].num_of_events += 1
-                            self.__board[cur_c][cur_r].time_with_events += stay_time
-                            self.__total_dur += stay_time
-                        else:
-                            count += 1
+        events_to_remove = []
+
+        for event, coord in self.__events.items():
+            c = coord[0]
+            r = coord[1]
+            if time_now >= event.die_time:
+                self.__board[c][r].event_list.remove(event)
+                events_to_remove.append(event)
+            else:
+                if time_now > event.finish_time:
+                    cur_c = event.next_c
+                    cur_r = event.next_r
+                    event.update_sector(cur_c, cur_r)
+                    event.update_next_sector()
+                    stay_time = self.stay_expo()
+                    event.update_next_move_time(stay_time)
+                    self.__board[c][r].event_list.remove(event)
+                    self.__board[cur_c][cur_r].event_list.append(event)
+                    self.__board[cur_c][cur_r].num_of_events += 1
+                    self.__board[cur_c][cur_r].time_with_events += stay_time
+                    self.__events[event] = (cur_c, cur_r)
+
+        for event in events_to_remove:
+            del self.__events[event]
 
         if time_now >= self.next_add_event_time:
             self.__setUpEvent()
@@ -238,6 +242,7 @@ class Arena:
 
     def get_total_events(self):
         return self.__total_events
+
 
 
 
