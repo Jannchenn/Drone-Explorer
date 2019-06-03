@@ -58,7 +58,6 @@ class Drone:
         self.start = 0
         self.end = 0
         self.count = 0
-        self.event_set = set()
 
         self.connection_string = self.args.connect
 
@@ -135,7 +134,7 @@ class Drone:
         :param c: the coloum of the board; r: the row of the board; wpl: the loaction of the sector
         """
         while (get_distance_metres(self.vehicle.location.global_relative_frame, wpl) > 2):
-            #print(get_distance_metres(self.vehicle.location.global_relative_frame, wpl))
+            print(get_distance_metres(self.vehicle.location.global_relative_frame, wpl))
             time.sleep(0.1)
             #print("NOT ARRIVED")
         print("ARRIVED")
@@ -157,11 +156,10 @@ class Drone:
             for event in events:
                 event_id.append(event.id)
                 self.times_hasEvent[event][(c, r)].append(now_time)
-                self.event_set.add(event)
         self.explore[c][r].has_event = has_event
         self.explore[c][r].id = event_id
 
-        #print("EVENT: " + str(has_event))
+        print("EVENT: " + str(has_event))
 
     def fly(self):
         """
@@ -230,11 +228,8 @@ class Drone:
         """
         return self.start, self.end
 
-    def get_total_caught_event_include_same(self):
-        return self.total_events
-
     def get_total_caught_event(self):
-        return len(self.event_set)
+        return self.total_events
 
 
 def get_distance_metres(aLocation1, aLocation2):
